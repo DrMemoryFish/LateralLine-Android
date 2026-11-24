@@ -1,0 +1,22 @@
+{
+  "phase_name": "",
+  "phase_status": "in_progress",
+  "commit_ready": false,
+  "intended_commit_scope": [
+    {
+      "path": "",
+      "bucket": "commit_now",
+      "reason": ""
+    }
+  ],
+  "introduced_files": [],
+  "modified_files": [],
+  "expected_artifacts": [],
+  "expected_durable_reports": [],
+  "expected_noncommitted_generated_outputs": [],
+  "remaining_dirty_expected": [],
+  "remaining_dirty_unexpected": [],
+  "push_status": "not_pushed",
+  "final_commit_hash": null
+}
+
