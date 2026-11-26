@@ -117,8 +117,9 @@ Source/test edits and builds are rerunnable. Before resuming after interruption,
 - [x] 2026-11-24: defined the non-destructive queue-full and coexistence contract in DEC-0013.
 - [x] 2026-11-24: implemented the 5,000,000 capacity, removed both caller-side eviction paths, made enqueue/requeue rejection explicit, and added focused caller plus small-capacity Room regression coverage.
 - [x] 2026-11-24: implemented the separate `org.lateralline.android.travel.debug` identity, `LateralLine Travel` label, variant-derived actions/provider authorities/shortcut package, and retained donor namespace plus `owntracks://` interoperability.
-- [x] 2026-11-24: passed focused and full GMS/OSS JVM tests, formatting, GMS lint task, Android-test compilation, GMS debug assembly, APK signature/identity inspection, and checkpoint reconciliation.
+- [x] 2026-11-24: passed focused and full GMS/OSS JVM tests, formatting, GMS lint task, Android-test compilation, GMS debug assembly, and APK signature/identity inspection; updated the plan and durable registers before sidecar reconciliation was interrupted.
 - [x] 2026-11-24: confirmed no Android device was attached at the final ADB gate and precisely deferred Samsung Galaxy S24 install/runtime validation below.
+- [x] 2026-11-26: resumed from pushed recovery commit `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c`, confirmed HEAD and `origin/travel-build-v0` match, revalidated the preserved APK/hash/identity/signature and generated evidence, rechecked that no Android device is attached, and reconciled the stale checkpoint sidecar without redoing completed implementation.
 
 ## Surprises & Discoveries
 - The Room queue already rejects full enqueue/requeue without deletion; both eviction paths are caller behavior inherited from the earlier deque implementation.
@@ -141,6 +142,7 @@ Source/test edits and builds are rerunnable. Before resuming after interruption,
 - APK identity: `org.lateralline.android.travel.debug`; label `LateralLine Travel`; version `2.6.0` (`420600000`); SHA-256 `6ab0b5072e9d56ab2be359640e69e5fa9af603adcecf0787367b6edd27377b99`; valid Android debug v2 signature.
 - Direct APK inspection confirms isolated file/log provider authorities, isolated exported intent actions, variant-correct shortcut package targeting, and retained `owntracks://config` handling.
 - No Samsung Galaxy S24 was attached when `/mnt/E/AI/Android/sdk/platform-tools/adb devices -l` was run at the final validation gate. Installation, permissions, OEM lifecycle, tracking-mode, real dense capture, persistence/restart, endpoint, reconnect/drain, and coexistence checks are therefore deferred rather than claimed.
+- Recovery on 2026-11-26 confirmed the clean interrupted checkpoint at `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c` is present on both local HEAD and `origin/travel-build-v0`. The preserved APK still has the recorded SHA-256, package, label, and valid v2 debug signature. A fresh ADB probe again listed no device, so the deferred S24 checklist remains the only incomplete acceptance boundary.
 
 ### Deferred Samsung Galaxy S24 validation
 1. Attach the S24 with USB debugging enabled and confirm it appears in `/mnt/E/AI/Android/sdk/platform-tools/adb devices -l`.

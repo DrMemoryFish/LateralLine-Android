@@ -212,6 +212,8 @@ For DEC-0001 through DEC-0012, event date `2026-10-10` records when the owner su
 - Validation state: `verified decision; implementation pending`
 - Boundary: documentation task only.
 - Follow-up actions: execute the active plan as the next mission.
+- Validation update (UTC): 2026-11-26 — checkpoints 1–4 are implemented and host-verified in recovery commit `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c`; physical Samsung Galaxy S24 validation remains deferred because no device is attached.
+- Current follow-up (UTC): execute the active plan's deferred S24 checklist; this decision still does not authorize permanent history, backend, identity, synchronization, circles, UI, or sensor architecture.
 - Recorded by: Codex
 
 ### 2026-11-24 - DEC-0013
@@ -227,4 +229,21 @@ For DEC-0001 through DEC-0012, event date `2026-10-10` records when the owner su
 - Validation state: `decided for Travel Build v0; implementation and build verification pending`
 - Boundary: no permanent history model, backend, namespace migration, UI redesign, or protocol change is authorized.
 - Follow-up actions: implement checkpoints 2–4, verify the GMS debug APK, and record direct versus deferred S24 evidence.
+- Validation update (UTC): 2026-11-26 — implementation, focused/full host tests, formatting, lint task, Android-test compilation, GMS debug assembly, and direct APK identity/signature inspection are complete in recovery commit `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c`; the preserved APK was rechecked after interruption. Device-only lifecycle, coexistence, endpoint, persistence/reconnect, and instrumentation execution remain deferred.
+- Current follow-up (UTC): execute the active plan's deferred Samsung Galaxy S24 validation checklist; do not expand this bounded decision into permanent architecture work.
+- Recorded by: Codex
+
+### 2026-11-26 - DEC-0014
+- Date recorded (UTC): 2026-11-26
+- Decision ID: DEC-0014
+- Context: interruption recovery temporarily required owner-executed Git operations, while the durable workflow did not explicitly assign end-to-end commit, push, and post-commit bookkeeping responsibility after the owner authorizes those actions.
+- Decision: when the owner instructs Codex to commit a completed or reviewed repository unit, Codex owns scope inspection, durable-record reconciliation, validation, staging, staged-diff review, commit creation, collection of real Git evidence, non-recursive bookkeeping, authorized push, remote verification, and final status reporting. Push still requires owner authorization. A commit cannot record its own hash; a single later bookkeeping commit may record the preceding substantive commit and push without spawning another bookkeeping-only commit.
+- Reason: repository continuity must not depend on the owner manually completing routine Git/bookkeeping steps, and recorded hashes/statuses must come from actual Git evidence rather than prediction.
+- Alternatives considered: always hand commit commands to the owner; leave executor responsibility implicit; create recursively self-referential bookkeeping commits.
+- Tradeoffs: an authorized workflow may produce one small governance follow-up commit, and its own hash/push is verified externally until the next natural checkpoint.
+- Consequences: `docs/TASK_PROTOCOL.md` defines the operational sequence and `PLANS.md` defines `final_commit_hash` semantics.
+- Source surfaces and evidence: explicit owner instruction on 2026-11-26; historical audit of `2913c6182980c3e86e5fbe9f217faf6cdc80028a`, `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c`, reflogs, and stale durable bookkeeping.
+- Validation state: `decided and applied to the current recovery reconciliation`
+- Boundary: this decision governs repository commit/push execution only after owner authorization; it does not broaden implementation scope or bypass destructive/external stop conditions.
+- Follow-up actions: use the governed sequence for this and future owner-authorized commits.
 - Recorded by: Codex

@@ -23,7 +23,7 @@
 ## Active Risks
 ### R-0001: `Destructive donor queue overflow`
 - Date recorded (UTC): 2026-11-24
-- Last reviewed (UTC): 2026-11-24
+- Last reviewed (UTC): 2026-11-26
 - Status: mitigated
 - Severity: high
 - Area: Travel Build v0
@@ -65,12 +65,12 @@
 
 ### R-0004: `Android background and lifecycle regression`
 - Date recorded (UTC): 2026-11-24
-- Last reviewed (UTC): 2026-11-24
+- Last reviewed (UTC): 2026-11-26
 - Status: open
 - Severity: high
 - Area: mobile donor behavior
 - Risk: changes break permissions, foreground services, sleep, network transitions, reconnect, location providers, geofencing, migrations, or manufacturer-specific behavior.
-- Evidence: donor source/history/tests and owner warning; Travel Build v0 GMS/OSS unit suites, Android-test compilation, lint task, and GMS APK assembly pass.
+- Evidence: donor source/history/tests and owner warning; Travel Build v0 GMS/OSS unit suites, Android-test compilation, lint task, and GMS APK assembly pass; recovery on 2026-11-26 confirmed the evidence survived and a fresh ADB probe again listed no attached device.
 - Validation state: verified risk; automated build/test evidence passed, physical S24 lifecycle validation deferred because no device was attached
 - Mitigation: narrow plans, source/history inspection, regression tests, and the still-required S24 validation checklist in the active plan.
 - Owner: each Android implementation plan
@@ -191,12 +191,12 @@
 
 ### R-0013: `Travel queue storage and performance pressure`
 - Date recorded (UTC): 2026-11-24
-- Last reviewed (UTC): 2026-11-24
+- Last reviewed (UTC): 2026-11-26
 - Status: open
 - Severity: medium
 - Area: Travel Build v0
 - Risk: allowing up to 5,000,000 Room rows can consume substantial device storage and may affect queue startup, backup, query, and drain performance before the permanent history architecture exists.
-- Evidence: Travel Build v0 deliberately raises the injected capacity from 100,000 to 5,000,000; no representative multi-million-row S24 benchmark has been run.
+- Evidence: Travel Build v0 deliberately raises the injected capacity from 100,000 to 5,000,000; recovery on 2026-11-26 reconfirmed the capacity in source and preserved APK/build evidence, but no representative multi-million-row S24 benchmark has been run.
 - Validation state: capacity and build directly verified; performance magnitude unknown
 - Mitigation: treat the build as transitional, monitor queue length/storage during travel, preserve free space, and design/benchmark the permanent durable-history model separately.
 - Owner: project owner and future durable-history plan

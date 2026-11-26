@@ -1,17 +1,17 @@
 # Roadmap
 
-Last reviewed: 2026-11-24  
+Last reviewed: 2026-11-26
 Roadmap status: `active high-level sequencing; post-travel order remains revisable`
 
 ## Snapshot
-- Current live frontier: governance foundation followed by Travel Build v0.
+- Current live frontier: Travel Build v0 host implementation is complete; Samsung Galaxy S24 validation is deferred.
 - Current active plan: `plans/ACTIVE/2026-11-24_travel-build-v0.md`.
-- Current blockers: none known for beginning implementation; physical-device validation requires the Samsung Galaxy S24.
-- Next recommended milestone: execute Travel Build v0 without expanding into long-term redesign.
+- Current blockers: physical-device validation requires the Samsung Galaxy S24; no host implementation blocker remains.
+- Next recommended milestone: execute the active plan's deferred S24 checklist without expanding into long-term redesign.
 
 ## Major Completed Milestones
 - [x] OwnTracks donor repository established at the recorded inception commit.
-- [x] Durable governance/documentation foundation instantiated and Travel Build v0 planned (pending commit at this task closeout).
+- [x] Durable governance/documentation foundation instantiated and Travel Build v0 planned; committed as `2913c6182980c3e86e5fbe9f217faf6cdc80028a` and pushed to `origin/travel-build-v0` on 2026-11-24 after the original task recorded it as pending.
 
 ## Ordered Milestones
 1. **Travel-safe donor build** — protect queued travel history and separate installation identity while preserving donor behavior.
@@ -29,4 +29,3 @@ Roadmap status: `active high-level sequencing; post-travel order remains revisab
 
 ## Sequencing Caveat
 Milestone 1 is active. Later ordering is `PROPOSED` and should change when evidence establishes better dependencies. The roadmap does not settle backend framework, schema, batch encoding, mobile framework, iOS strategy, deployment targets, retention, or sensor design.
-

@@ -67,3 +67,33 @@ Append-only work journal for continuity. Entries remain oldest-to-newest. A pend
 - Next recommended step: attach the Samsung Galaxy S24 and execute the active plan's deferred device checklist before relying on the build for travel.
 - Stop reason, if any: physical-device access unavailable at the final validation gate; all safe host-side work completed
 - Recorded by: Codex
+
+### 2026-11-26 — Travel Build v0 interrupted-state recovery
+- Timestamp (UTC): 2026-11-26T15:17:51Z
+- Session goal: safely resume the bounded Travel Build v0 mission from the owner-preserved interrupted checkpoint without redoing completed implementation.
+- Completed: confirmed the working tree began clean on `travel-build-v0`; confirmed local HEAD and `origin/travel-build-v0` both resolve to recovery commit `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c`; compared that commit's 21-file scope with the recorded pre-interruption implementation state; confirmed the APK, Android-test APK, unit-test reports, and lint reports survived; reverified the APK SHA-256, package, label, version, and v2 debug signature; performed a fresh ADB probe; reconciled the stale checkpoint sidecar to the actual committed/pushed state; updated DEC-0012/DEC-0013 validation status; and re-reviewed R-0001/R-0004/R-0013 without changing their conclusions.
+- Evidence or artifacts: Git commit/diff/status and remote-tracking ref; `/home/drmemoryfish/ChatGPT/LateralLine/project/app/build/outputs/apk/gms/debug/app-gms-debug.apk`; `/home/drmemoryfish/ChatGPT/LateralLine/project/app/build/outputs/apk/androidTest/gms/debug/app-gms-debug-androidTest.apk`; preserved Gradle reports under `project/app/build/`; `aapt dump badging`; `apksigner verify --verbose --print-certs`; `adb devices -l` with no attached devices.
+- Decisions referenced: DEC-0012 and DEC-0013; unchanged
+- Failures referenced: FAIL-0001; no recurrence and no new product/build failure
+- Open questions added or resolved: none
+- Entry commit: pushed WIP recovery checkpoint `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c`; this recovery reconciliation is intentionally uncommitted pending owner direction
+- Push status: implementation commit is pushed to `origin/travel-build-v0`; this recovery reconciliation is not pushed
+- Validation state: host implementation and verification remain complete; a fresh 2026-11-26 probe found no attached device, so Samsung Galaxy S24 runtime validation remains precisely deferred
+- Next recommended step: attach the Samsung Galaxy S24 and execute the active plan's ten-step deferred validation checklist, beginning with co-installation alongside official OwnTracks.
+- Stop reason, if any: physical-device access is unavailable at the final validation gate; no implementation or governance ambiguity remains.
+- Recorded by: Codex
+
+### 2026-11-26 — historical Git/bookkeeping audit and workflow ownership
+- Timestamp (UTC): 2026-11-26T15:38:00Z
+- Session goal: reconcile repository history from the donor/inception boundary, establish owner-authorized Codex commit/bookkeeping responsibility, and commit/push the reviewed recovery governance scope without rewriting history.
+- Completed: fetched `origin`; audited branch/remotes, full commit metadata/topology, reflogs, the donor boundary, all LateralLine commits, durable registers, workflow authorities, the active plan, and checkpoint; confirmed the history is linear from donor commit `3129fc23296c16ec5dd9f46d91d0fd94942b9f49` through governance commit `2913c6182980c3e86e5fbe9f217faf6cdc80028a` and WIP recovery checkpoint `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c`, with no other LateralLine commits; reconciled the stale roadmap and established DEC-0014 plus the minimal commit/hash protocol in existing owner documents.
+- Evidence or artifacts: Git log/show/reflog/branch/remote/status/diff evidence; `2913c6182980c3e86e5fbe9f217faf6cdc80028a` author/commit timestamp 2026-11-24T23:18:17Z and remote-tracking push reflog 2026-11-24T23:18:23Z; `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c` author/commit timestamp 2026-11-26T15:12:53Z and remote-tracking push reflog 2026-11-26T15:12:55Z; refreshed `origin/travel-build-v0` equality.
+- Decisions referenced: DEC-0012, DEC-0013, and DEC-0014
+- Failures referenced: FAIL-0001 remains contained; no new failure
+- Open questions added or resolved: none
+- Entry commit: pending; this historical audit and recovery reconciliation is the substantive governance commit being prepared
+- Push status: not yet pushed; owner authorized commit and push in this workflow
+- Validation state: Git proves both LateralLine commits and pushes. The 2026-11-24 progress entries correctly preserve that their work was pending/uncommitted at those original timestamps; later Git proves governance commit `2913c618...` completed that foundation. The original task explicitly excluded commit/push and Git records the owner identity as author/committer, so the audit attributes `2913c618...` to an owner-performed follow-up. The owner explicitly identifies `f2d98fc9...` as the manually created interruption-recovery checkpoint.
+- Next recommended step: validate and commit this governance reconciliation, record its real Git evidence in one non-recursive follow-up, push both authorized commits, then proceed only when the S24 is available.
+- Stop reason, if any: none for the authorized governance commit/push; S24 runtime validation remains deferred.
+- Recorded by: Codex
