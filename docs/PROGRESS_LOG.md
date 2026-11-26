@@ -136,9 +136,9 @@ Append-only work journal for continuity. Entries remain oldest-to-newest. A pend
 - Decisions referenced: DEC-0012, DEC-0013, and DEC-0014; no material architecture decision changed
 - Failures referenced: FAIL-0002 and FAIL-0003
 - Open questions added or resolved: launcher shortcut contract resolved; representative Samsung background behavior and offline queue persistence/reconnect remain open validation work, not architecture questions
-- Entry commit: pending verified shortcut-resolution commit
-- Push status: not pushed; current implementation and validation records are uncommitted
+- Entry commit: substantive shortcut-resolution commit `18582d1a11d1aafeff86363259770d8e91156e80`, created by Codex in the owner-authorized workflow at 2026-11-26T20:44:09Z
+- Push status: `18582d1a11d1aafeff86363259770d8e91156e80` pushed to `origin/travel-build-v0`; this entry and checkpoint update form the single non-recursive bookkeeping follow-up whose own hash/push are verified directly from Git under DEC-0014
 - Validation state: both Samsung Launcher shortcuts pass; official OwnTracks remains installed; Travel package identity, existing HTTP state, queue 0, four runtime grants, Move mode, and background-service presence survived update installation. Representative movement/background lifecycle, Samsung battery configuration, offline queue growth and restart persistence, reconnect/drain, and an actual configuration import remain unverified.
-- Next recommended step: complete the governed shortcut-resolution commit/push, then resume only the remaining physical-device validation boundary in the active plan.
+- Next recommended step: resume only the remaining physical-device validation boundary in the active plan: Samsung battery/background setup, representative movement, offline restart persistence/reconnect/drain, and actual configuration import/external-control checks.
 - Stop reason, if any: shortcut defect resolved at its governed commit boundary; broader Travel Build v0 device acceptance remains open.
 - Recorded by: Codex

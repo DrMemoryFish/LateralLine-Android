@@ -1,73 +1,10 @@
 {
   "phase_name": "Travel Build v0 shortcut defect resolution and continued Samsung validation",
   "phase_status": "shortcut_verified_background_and_offline_persistence_pending",
-  "commit_ready": true,
-  "intended_commit_scope": [
-    {
-      "path": "docs/FAILURE_LOG.md",
-      "bucket": "commit_now",
-      "reason": "Record the contained device-output privacy failure and the resolved Samsung launcher shortcut failure."
-    },
-    {
-      "path": "docs/PROGRESS_LOG.md",
-      "bucket": "commit_now",
-      "reason": "Record HTTP/mode evidence, shortcut resolution, physical verification, and the exact remaining boundary."
-    },
-    {
-      "path": "docs/RISK_REGISTER.md",
-      "bucket": "commit_now",
-      "reason": "Update Android lifecycle risk with passed endpoint/mode/shortcut evidence and pending Samsung background work."
-    },
-    {
-      "path": "plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json",
-      "bucket": "commit_now",
-      "reason": "Current verified shortcut boundary, intended commit scope, and remaining device-validation state."
-    },
-    {
-      "path": "plans/ACTIVE/2026-11-24_travel-build-v0.md",
-      "bucket": "commit_now",
-      "reason": "Living device checklist, resolved shortcut defect, and remaining background/offline validation."
-    },
-    {
-      "path": "project/app/src/main/AndroidManifest.xml",
-      "bucket": "commit_now",
-      "reason": "Add two narrow exported launcher aliases while retaining private target activities."
-    },
-    {
-      "path": "project/app/src/main/res/xml/shortcuts.xml",
-      "bucket": "commit_now",
-      "reason": "Target the secure aliases with the literal release package identity."
-    },
-    {
-      "path": "project/app/src/debug/res/xml/shortcuts.xml",
-      "bucket": "commit_now",
-      "reason": "Supply the literal debug package identity required by Android static-shortcut parsing."
-    },
-    {
-      "path": "project/app/src/test/java/org/owntracks/android/ShortcutContractTest.kt",
-      "bucket": "commit_now",
-      "reason": "Protect source manifest, alias, action, and release/debug package invariants."
-    },
-    {
-      "path": "project/app/src/androidTest/kotlin/org/owntracks/android/e2e/LauncherShortcutContractTest.kt",
-      "bucket": "commit_now",
-      "reason": "Verify the installed package/component/action and exported/private contract through Android APIs."
-    }
-  ],
-  "introduced_files": [
-    "project/app/src/androidTest/kotlin/org/owntracks/android/e2e/LauncherShortcutContractTest.kt",
-    "project/app/src/debug/res/xml/shortcuts.xml",
-    "project/app/src/test/java/org/owntracks/android/ShortcutContractTest.kt"
-  ],
-  "modified_files": [
-    "docs/FAILURE_LOG.md",
-    "docs/PROGRESS_LOG.md",
-    "docs/RISK_REGISTER.md",
-    "plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json",
-    "plans/ACTIVE/2026-11-24_travel-build-v0.md",
-    "project/app/src/main/AndroidManifest.xml",
-    "project/app/src/main/res/xml/shortcuts.xml"
-  ],
+  "commit_ready": false,
+  "intended_commit_scope": [],
+  "introduced_files": [],
+  "modified_files": [],
   "expected_artifacts": [
     "project/app/build/outputs/apk/gms/debug/app-gms-debug.apk",
     "project/app/build/outputs/apk/androidTest/gms/debug/app-gms-debug-androidTest.apk",
@@ -85,19 +22,8 @@
     "Gradle build/test outputs under ignored project build directories",
     "Temporary redacted/minimized ADB UI evidence outside the repository"
   ],
-  "remaining_dirty_expected": [
-    "docs/FAILURE_LOG.md",
-    "docs/PROGRESS_LOG.md",
-    "docs/RISK_REGISTER.md",
-    "plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json",
-    "plans/ACTIVE/2026-11-24_travel-build-v0.md",
-    "project/app/src/androidTest/kotlin/org/owntracks/android/e2e/LauncherShortcutContractTest.kt",
-    "project/app/src/debug/res/xml/shortcuts.xml",
-    "project/app/src/main/AndroidManifest.xml",
-    "project/app/src/main/res/xml/shortcuts.xml",
-    "project/app/src/test/java/org/owntracks/android/ShortcutContractTest.kt"
-  ],
+  "remaining_dirty_expected": [],
   "remaining_dirty_unexpected": [],
-  "push_status": "Repository is pushed through bookkeeping commit ebaf14b6f5c07b5cf209c8b3fb0e20aff4b0e89a; current verified shortcut-resolution scope is uncommitted and unpushed",
+  "push_status": "Substantive shortcut-resolution commit 18582d1a11d1aafeff86363259770d8e91156e80 pushed to origin/travel-build-v0; the single bookkeeping follow-up is verified directly from Git at handoff under DEC-0014",
   "final_commit_hash": null
 }
