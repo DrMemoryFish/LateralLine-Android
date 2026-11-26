@@ -1,60 +1,10 @@
 {
   "phase_name": "Travel Build v0 host implementation and verification",
   "phase_status": "implementation_complete_device_validation_deferred",
-  "commit_ready": true,
-  "intended_commit_scope": [
-    {
-      "path": "PLANS.md",
-      "bucket": "commit_now",
-      "reason": "Define non-recursive final_commit_hash semantics in the checkpoint-format owner."
-    },
-    {
-      "path": "docs/DECISION_LOG.md",
-      "bucket": "commit_now",
-      "reason": "Recovery validation updates and DEC-0014 workflow decision."
-    },
-    {
-      "path": "docs/PROGRESS_LOG.md",
-      "bucket": "commit_now",
-      "reason": "2026-11-26 interrupted-state recovery continuity entry."
-    },
-    {
-      "path": "docs/ROADMAP.md",
-      "bucket": "commit_now",
-      "reason": "Reconcile the committed/pushed governance foundation and current frontier."
-    },
-    {
-      "path": "docs/RISK_REGISTER.md",
-      "bucket": "commit_now",
-      "reason": "2026-11-26 re-review of Travel Build v0 queue, lifecycle, and storage risks."
-    },
-    {
-      "path": "docs/TASK_PROTOCOL.md",
-      "bucket": "commit_now",
-      "reason": "Define the owner-authorized end-to-end commit and push workflow."
-    },
-    {
-      "path": "plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json",
-      "bucket": "commit_now",
-      "reason": "Reconciled current recovery-documentation scope and WIP push state."
-    },
-    {
-      "path": "plans/ACTIVE/2026-11-24_travel-build-v0.md",
-      "bucket": "commit_now",
-      "reason": "2026-11-26 recovery and genuine remaining-boundary reconciliation."
-    }
-  ],
+  "commit_ready": false,
+  "intended_commit_scope": [],
   "introduced_files": [],
-  "modified_files": [
-    "PLANS.md",
-    "docs/DECISION_LOG.md",
-    "docs/PROGRESS_LOG.md",
-    "docs/ROADMAP.md",
-    "docs/RISK_REGISTER.md",
-    "docs/TASK_PROTOCOL.md",
-    "plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json",
-    "plans/ACTIVE/2026-11-24_travel-build-v0.md"
-  ],
+  "modified_files": [],
   "expected_artifacts": [
     "project/app/build/outputs/apk/gms/debug/app-gms-debug.apk",
     "project/app/build/outputs/apk/androidTest/gms/debug/app-gms-debug-androidTest.apk",
@@ -75,17 +25,8 @@
   "expected_noncommitted_generated_outputs": [
     "Gradle build/test/lint outputs under ignored project build directories"
   ],
-  "remaining_dirty_expected": [
-    "PLANS.md",
-    "docs/DECISION_LOG.md",
-    "docs/PROGRESS_LOG.md",
-    "docs/ROADMAP.md",
-    "docs/RISK_REGISTER.md",
-    "docs/TASK_PROTOCOL.md",
-    "plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json",
-    "plans/ACTIVE/2026-11-24_travel-build-v0.md"
-  ],
+  "remaining_dirty_expected": [],
   "remaining_dirty_unexpected": [],
-  "push_status": "WIP recovery commit f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c pushed to origin/travel-build-v0; current recovery reconciliation uncommitted and unpushed",
+  "push_status": "Substantive recovery-governance reconciliation commit 31a90d29aa3b7c8ff5eb4c9d7ceb53b8b0103a4b pushed to origin/travel-build-v0; the single bookkeeping follow-up is verified directly from Git at handoff under DEC-0014",
   "final_commit_hash": null
 }
