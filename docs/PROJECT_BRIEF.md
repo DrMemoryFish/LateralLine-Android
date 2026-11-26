@@ -19,7 +19,8 @@ Build an independent, self-hostable, offline-first, privacy-focused, secure, dur
 - Current branch: `travel-build-v0`.
 - OwnTracks donor/inception commit and HEAD before governance work: `3129fc23296c16ec5dd9f46d91d0fd94942b9f49`; Git commit date: `2026-10-05T11:37:16+01:00`.
 - Owner-recorded LateralLine fork date: 2026-10-10. The local clone and `travel-build-v0` branch creation are independently evidenced by the reflog on that date. Governance foundation instantiation date: 2026-11-24. Official upstream: `https://github.com/owntracks/android`.
-- The implementation is currently the OwnTracks Android donor code. Its outgoing queue is Room-backed, injected with a 100,000-message capacity, and its caller has destructive normal-overflow and failed-requeue paths.
+- The implementation remains the OwnTracks Android donor code with bounded Travel Build v0 changes. Its outgoing queue is Room-backed, injected with a 5,000,000-message capacity, and full normal enqueue or failed-message requeue rejects the unpersisted message without evicting an already-persisted row.
+- The GMS debug travel APK now installs as `org.lateralline.android.travel.debug` with the visible name `LateralLine Travel`, while retaining the donor Kotlin namespace and OwnTracks HTTP/MQTT/configuration interoperability surfaces.
 - OwnTracks Recorder exists in the owner's infrastructure, but this repository does not yet contain a LateralLine authoritative backend.
 - No LateralLine passkey/device-identity system, circles, redesigned mobile shell, durable-history model, or batch-sync protocol is implemented yet.
 
@@ -58,4 +59,4 @@ Cloudflare may provide edge connectivity/security/tunneling. Application authent
 Dense capture improves temporal resolution but does not guarantee pavement side, traffic lane, or centimeter-level spatial accuracy. GNSS accuracy metadata, altitude/vertical accuracy, barometer, inertial sensors, activity recognition, raw GNSS, map matching, sensor fusion, and pedestrian dead reckoning are future research areas—not Travel Build v0 scope.
 
 ## Current Milestone
-Travel Build v0 is an emergency-safe transitional donor build: increase capacity to 5,000,000, remove destructive oldest-message eviction, preserve Room/acquisition/modes/MQTT/HTTP, make queue-full failure explicit, separate installation identity, add tests, build a GMS debug APK, and verify on Samsung Galaxy S24. It is not the permanent storage architecture. See `plans/ACTIVE/2026-11-24_travel-build-v0.md`.
+Travel Build v0 is an emergency-safe transitional donor build. Host-side implementation, tests, and GMS debug APK verification are complete: capacity is 5,000,000, destructive oldest-message eviction is removed, queue-full failure is explicit, and installation identity is separate while Room/acquisition/modes/MQTT/HTTP remain intentionally preserved. Samsung Galaxy S24 installation and runtime validation are precisely deferred because no device was attached at the final gate. It is not the permanent storage architecture. See `plans/ACTIVE/2026-11-24_travel-build-v0.md`.

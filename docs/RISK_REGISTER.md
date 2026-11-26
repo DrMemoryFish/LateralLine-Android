@@ -24,13 +24,13 @@
 ### R-0001: `Destructive donor queue overflow`
 - Date recorded (UTC): 2026-11-24
 - Last reviewed (UTC): 2026-11-24
-- Status: open
+- Status: mitigated
 - Severity: high
 - Area: Travel Build v0
 - Risk: a full queue causes the caller to dequeue an oldest persisted item when admitting a new or failed/requeued message.
-- Evidence: observed `MessageProcessor.queueMessageForSending` and `reQueueMessage`; capacity observed in `MessageQueueModule.kt`.
-- Validation state: verified
-- Mitigation: execute Travel Build v0 with focused regression tests before high-volume travel.
+- Evidence: the prior `MessageProcessor.queueMessageForSending` and `reQueueMessage` eviction calls were observed and removed; focused JVM tests verify both caller paths never call `dequeue()` on rejection, and small-capacity Room instrumentation tests cover row preservation/order.
+- Validation state: source and JVM regression coverage verified; Room instrumentation test compiled but device execution deferred because no Android device was attached
+- Mitigation: Travel Build v0 rejects full writes, logs the failure, balances rejected enqueue accounting, and preserves all already-persisted rows.
 - Owner: active Travel Build v0 plan
 - Review trigger: implementation/test completion
 - Recorded by: Codex
@@ -70,9 +70,9 @@
 - Severity: high
 - Area: mobile donor behavior
 - Risk: changes break permissions, foreground services, sleep, network transitions, reconnect, location providers, geofencing, migrations, or manufacturer-specific behavior.
-- Evidence: donor source/history/tests and owner warning.
-- Validation state: verified risk
-- Mitigation: narrow plans, source/history inspection, regression tests, and S24 validation.
+- Evidence: donor source/history/tests and owner warning; Travel Build v0 GMS/OSS unit suites, Android-test compilation, lint task, and GMS APK assembly pass.
+- Validation state: verified risk; automated build/test evidence passed, physical S24 lifecycle validation deferred because no device was attached
+- Mitigation: narrow plans, source/history inspection, regression tests, and the still-required S24 validation checklist in the active plan.
 - Owner: each Android implementation plan
 - Review trigger: every donor behavior change
 - Recorded by: Codex
@@ -189,3 +189,16 @@
 - Review trigger: sync protocol design
 - Recorded by: Codex
 
+### R-0013: `Travel queue storage and performance pressure`
+- Date recorded (UTC): 2026-11-24
+- Last reviewed (UTC): 2026-11-24
+- Status: open
+- Severity: medium
+- Area: Travel Build v0
+- Risk: allowing up to 5,000,000 Room rows can consume substantial device storage and may affect queue startup, backup, query, and drain performance before the permanent history architecture exists.
+- Evidence: Travel Build v0 deliberately raises the injected capacity from 100,000 to 5,000,000; no representative multi-million-row S24 benchmark has been run.
+- Validation state: capacity and build directly verified; performance magnitude unknown
+- Mitigation: treat the build as transitional, monitor queue length/storage during travel, preserve free space, and design/benchmark the permanent durable-history model separately.
+- Owner: project owner and future durable-history plan
+- Review trigger: S24 dense-capture validation, large backlog evidence, low-storage warning, or permanent history design
+- Recorded by: Codex

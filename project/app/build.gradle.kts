@@ -46,7 +46,7 @@ android {
   namespace = "org.owntracks.android"
 
   defaultConfig {
-    applicationId = "org.owntracks.android"
+    applicationId = "org.lateralline.android.travel"
     minSdk = 24
     targetSdk = 36
 
@@ -60,6 +60,7 @@ android {
         "TRANSLATION_COUNT",
         localeCount.toString(),
     )
+    resValue("string", "application_id", "org.lateralline.android.travel")
 
     testInstrumentationRunner = "org.owntracks.android.testutils.hilt.CustomTestRunner"
 
@@ -118,6 +119,7 @@ android {
           ),
       )
       resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsAPIKey)
+      resValue("string", "application_id", "org.lateralline.android.travel.debug")
       applicationIdSuffix = ".debug"
       enableUnitTestCoverage = true
       enableAndroidTestCoverage = true

@@ -30,6 +30,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.RuleChain
 import org.owntracks.android.BaseApp
+import org.owntracks.android.BuildConfig
 import org.owntracks.android.R
 import org.owntracks.android.location.LocationProviderClient
 import org.owntracks.android.model.messages.MessageBase
@@ -179,7 +180,7 @@ abstract class TestWithAnActivity<T : Activity>(private val startActivity: Boole
     ContextCompat.startForegroundService(
         app,
         Intent(app, BackgroundService::class.java).apply {
-          action = "org.owntracks.android.CLEAR_CONTACTS"
+          action = "${BuildConfig.APPLICATION_ID}.CLEAR_CONTACTS"
         },
     )
     Timber.v("Waiting for contacts to be cleared")

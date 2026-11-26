@@ -210,7 +210,7 @@ class RoomBackedMessageQueue(
       mutex.withLock {
         val currentSize = dao.getCount()
         if (currentSize >= capacity) {
-          Timber.i("Queue at capacity ($capacity), cannot enqueue message")
+          Timber.w("Queue at capacity ($capacity), cannot enqueue message")
           return@withContext false
         }
 
@@ -253,7 +253,7 @@ class RoomBackedMessageQueue(
       mutex.withLock {
         val currentSize = dao.getCount()
         if (currentSize >= capacity) {
-          Timber.i("Queue at capacity ($capacity), cannot requeue message")
+          Timber.w("Queue at capacity ($capacity), cannot requeue message")
           return@withContext false
         }
 

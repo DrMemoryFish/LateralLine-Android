@@ -59,7 +59,7 @@
         android:fullBackupContent="@xml/backup_descriptor"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/travel_app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -196,8 +196,8 @@
             android:name=".support.receiver.ExternalIntentReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="org.owntracks.android.SEND_LOCATION_USER" />
-                <action android:name="org.owntracks.android.CHANGE_MONITORING" />
+                <action android:name="${applicationId}.SEND_LOCATION_USER" />
+                <action android:name="${applicationId}.CHANGE_MONITORING" />
             </intent-filter>
         </receiver>
 

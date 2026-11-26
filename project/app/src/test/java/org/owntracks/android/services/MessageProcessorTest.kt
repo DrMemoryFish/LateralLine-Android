@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -79,6 +80,10 @@ class MessageProcessorTest {
 
     @Volatile private var loopReachedAwait: CompletableDeferred<Unit>? = null
 
+    var enqueueResult = true
+    var requeueResult = true
+    var dequeueCalls = 0
+
     /**
      * Arms a fresh detector. Awaiting the returned deferred completes once a sender loop reaches
      * [awaitMessage]; it timing out means no loop is running.
@@ -93,11 +98,14 @@ class MessageProcessorTest {
 
     override suspend fun initialize(legacyStoragePath: File) {}
 
-    override suspend fun enqueue(message: MessageBase): Boolean = true
+    override suspend fun enqueue(message: MessageBase): Boolean = enqueueResult
 
-    override suspend fun requeue(message: MessageBase): Boolean = true
+    override suspend fun requeue(message: MessageBase): Boolean = requeueResult
 
-    override suspend fun dequeue(): MessageBase? = null
+    override suspend fun dequeue(): MessageBase? {
+      dequeueCalls++
+      return null
+    }
 
     override fun signalMessageAvailable() {}
 
@@ -127,11 +135,14 @@ class MessageProcessorTest {
   private lateinit var queue: LoopDetectingQueue
   private lateinit var applicationContext: Context
   private lateinit var messageProcessor: MessageProcessor
+  private lateinit var outgoingQueueIdlingResource: ThresholdIdlingResourceInterface
 
   @Before
   fun setUp() {
     queue = LoopDetectingQueue()
     applicationContext = mock<Context> { on { filesDir } doReturn File("/tmp") }
+    outgoingQueueIdlingResource =
+        mock<ThresholdIdlingResourceInterface> { on { isIdleNow } doReturn true }
     messageProcessor = buildMessageProcessor()
   }
 
@@ -144,8 +155,7 @@ class MessageProcessorTest {
           parser = mock<Parser> {},
           scheduler = mock<Scheduler> {},
           endpointStateRepo = EndpointStateRepo(),
-          outgoingQueueIdlingResource =
-              mock<ThresholdIdlingResourceInterface> { on { isIdleNow } doReturn true },
+          outgoingQueueIdlingResource = outgoingQueueIdlingResource,
           importConfigurationIdlingResource = SimpleIdlingResource("import", true),
           messageReceivedIdlingResource = mock<IdlingResourceWithData<MessageBase>> {},
           caKeyStore = KeyStore.getInstance(KeyStore.getDefaultType()).also { it.load(null) },
@@ -258,6 +268,27 @@ class MessageProcessorTest {
     assertLoopRunning(startDetector, "sender loop should be running after initialize")
 
     runBlocking { assertTrue(messageProcessor.checkConnection()) }
+  }
+
+  @Test
+  fun `rejected enqueue preserves existing queue entries and reports failure`() = runBlocking {
+    queue.enqueueResult = false
+    val message = MessageLocation()
+
+    assertFalse(messageProcessor.queueMessageForSending(message).await())
+
+    assertEquals(0, queue.dequeueCalls)
+    verify(outgoingQueueIdlingResource, times(1)).increment()
+    verify(outgoingQueueIdlingResource, times(1)).decrement()
+  }
+
+  @Test
+  fun `rejected failed-message requeue preserves unrelated queue entries`() = runBlocking {
+    queue.requeueResult = false
+
+    assertFalse(messageProcessor.reQueueMessage(MessageLocation()))
+
+    assertEquals(0, queue.dequeueCalls)
   }
 
   /**

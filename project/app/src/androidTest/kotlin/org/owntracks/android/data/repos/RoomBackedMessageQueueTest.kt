@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -79,6 +80,46 @@ class RoomBackedMessageQueueTest {
     assertEquals(regularMessage1.longitude, second.longitude, 0.0001)
     val third = queue.dequeue() as MessageLocation
     assertEquals(regularMessage2.longitude, third.longitude, 0.0001)
+    assertNull(queue.dequeue())
+  }
+
+  @Test
+  fun givenAFullQueueWhenEnqueueingThenExistingMessagesArePreservedInOrder() = runBlocking {
+    val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+    queue.close()
+    queue = RoomBackedMessageQueue(2, context, parser, Dispatchers.IO)
+    queue.initialize(context.filesDir)
+    val first = generateRandomMessageLocation()
+    val second = generateRandomMessageLocation()
+    val rejected = generateRandomMessageLocation()
+
+    assertTrue(queue.enqueue(first))
+    assertTrue(queue.enqueue(second))
+    assertFalse(queue.enqueue(rejected))
+
+    assertEquals(2, queue.size())
+    assertEquals(first.longitude, (queue.dequeue() as MessageLocation).longitude, 0.0001)
+    assertEquals(second.longitude, (queue.dequeue() as MessageLocation).longitude, 0.0001)
+    assertNull(queue.dequeue())
+  }
+
+  @Test
+  fun givenAFullQueueWhenRequeueingThenUnrelatedMessagesArePreservedInOrder() = runBlocking {
+    val context = ApplicationProvider.getApplicationContext<android.content.Context>()
+    queue.close()
+    queue = RoomBackedMessageQueue(2, context, parser, Dispatchers.IO)
+    queue.initialize(context.filesDir)
+    val first = generateRandomMessageLocation()
+    val second = generateRandomMessageLocation()
+    val rejectedRetry = generateRandomMessageLocation()
+
+    assertTrue(queue.enqueue(first))
+    assertTrue(queue.enqueue(second))
+    assertFalse(queue.requeue(rejectedRetry))
+
+    assertEquals(2, queue.size())
+    assertEquals(first.longitude, (queue.dequeue() as MessageLocation).longitude, 0.0001)
+    assertEquals(second.longitude, (queue.dequeue() as MessageLocation).longitude, 0.0001)
     assertNull(queue.dequeue())
   }
 

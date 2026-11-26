@@ -16,7 +16,7 @@ import org.owntracks.android.model.Parser
 @InstallIn(SingletonComponent::class)
 @Module
 object MessageQueueModule {
-  private const val QUEUE_CAPACITY = 100_000
+  internal const val QUEUE_CAPACITY = 5_000_000
 
   @Provides
   @Singleton

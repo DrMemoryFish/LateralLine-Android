@@ -213,3 +213,18 @@ For DEC-0001 through DEC-0012, event date `2026-10-10` records when the owner su
 - Boundary: documentation task only.
 - Follow-up actions: execute the active plan as the next mission.
 - Recorded by: Codex
+
+### 2026-11-24 - DEC-0013
+- Date recorded (UTC): 2026-11-24
+- Decision ID: DEC-0013
+- Context: Travel Build v0 needs a non-destructive queue-full contract and an installation identity that can coexist with official OwnTracks without a donor namespace rewrite.
+- Decision: A full or failed Room queue write rejects the message, preserves every already-persisted row, returns an asynchronous `false` result for normal enqueue, and emits an error-level diagnostic; failed-message requeue likewise returns failure to the sender loop and is treated as a permanent send failure rather than evicting another row or claiming a retry was persisted. The travel build uses application ID `org.lateralline.android.travel` (plus the existing `.debug` suffix for debug), variant-derived app action names and shortcut package targeting, and the visible name `LateralLine Travel`. The donor Kotlin namespace and the `owntracks://` configuration scheme remain unchanged.
+- Reason: this is the smallest explicit and testable failure contract that stops capacity-driven deletion, keeps current asynchronous call sites compatible, isolates Android storage/providers/intents from official OwnTracks, and preserves donor protocol/configuration interoperability.
+- Alternatives considered: evict an older row; keep the failed message only in memory; overload endpoint connection state with a queue error; rename the entire Kotlin namespace; change the OwnTracks configuration URI scheme.
+- Tradeoffs: the message that cannot be persisted is lost and the error is currently diagnosable through the existing logs rather than a new product UX; the retained `owntracks://` scheme can present an Android app chooser when both apps are installed.
+- Consequences: focused tests must prove rejection and non-eviction at small capacity, caller paths must never call `dequeue()` to make room, rejected enqueue must balance its idling-resource count, and the built APK identity/manifest must be inspected directly.
+- Source surfaces and evidence: DEC-0012; active Travel Build v0 plan; observed `RoomBackedMessageQueue`, `MessageProcessor`, build configuration, manifests, shortcuts, test contracts, and donor Git history through `b5e7332e` and `47ddbee2`.
+- Validation state: `decided for Travel Build v0; implementation and build verification pending`
+- Boundary: no permanent history model, backend, namespace migration, UI redesign, or protocol change is authorized.
+- Follow-up actions: implement checkpoints 2–4, verify the GMS debug APK, and record direct versus deferred S24 evidence.
+- Recorded by: Codex

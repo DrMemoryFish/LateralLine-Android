@@ -19,7 +19,9 @@ import kotlin.time.measureTime
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -321,18 +323,40 @@ constructor(
     }
   }
 
-  fun queueMessageForSending(message: MessageBase) {
+  fun queueMessageForSending(message: MessageBase): Deferred<Boolean> {
     outgoingQueueIdlingResource.increment()
-    scope.launch(ioDispatcher) {
-      val currentSize = outgoingQueue.size()
-      Timber.d("Queueing message=$message, current queueLength:$currentSize")
-      if (!outgoingQueue.enqueue(message)) {
-        val droppedMessage = outgoingQueue.dequeue()
-        Timber.e("Outgoing queue full. Dropping oldest message: $droppedMessage")
-        if (!outgoingQueue.enqueue(message)) {
-          Timber.e("Still can't put message onto the queue. Dropping: $message")
+    return scope.async(ioDispatcher) {
+      try {
+        val currentSize = outgoingQueue.size()
+        Timber.d("Queueing message=$message, current queueLength:$currentSize")
+        if (outgoingQueue.enqueue(message)) {
+          true
+        } else {
+          Timber.e(
+              "Outgoing queue full. Message was not persisted; existing queued messages were preserved: $message"
+          )
+          rollbackOutgoingQueueIdlingResourceIncrement()
+          false
         }
+      } catch (e: CancellationException) {
+        rollbackOutgoingQueueIdlingResourceIncrement()
+        throw e
+      } catch (e: Exception) {
+        Timber.e(
+            e,
+            "Unable to persist outgoing message; existing queued messages were preserved: $message",
+        )
+        rollbackOutgoingQueueIdlingResourceIncrement()
+        false
       }
+    }
+  }
+
+  private fun rollbackOutgoingQueueIdlingResourceIncrement() {
+    try {
+      outgoingQueueIdlingResource.decrement()
+    } catch (e: IllegalStateException) {
+      Timber.w(e, "Outgoing queue idling resource is invalid after persistence failure")
     }
   }
 
@@ -382,25 +406,31 @@ constructor(
               messageProcessorEndpoint.let { it ->
                 if (it == null) {
                   Timber.d("Endpoint not ready yet. Re-queueing")
-                  reQueueMessage(message)
-                  resendDelayWait(SEND_FAILURE_NOT_READY_WAIT)
                   lastMessageStatus =
-                      LastMessageStatus.RetryableFailure(
-                          message.numberOfRetries,
-                          SEND_FAILURE_BACKOFF_INITIAL_WAIT,
-                      )
+                      if (reQueueMessage(message)) {
+                        resendDelayWait(SEND_FAILURE_NOT_READY_WAIT)
+                        LastMessageStatus.RetryableFailure(
+                            message.numberOfRetries,
+                            SEND_FAILURE_BACKOFF_INITIAL_WAIT,
+                        )
+                      } else {
+                        LastMessageStatus.PermanentFailure
+                      }
                 } else {
                   it.sendMessage(message).exceptionOrNull()?.run {
                     when (this) {
                       is MessageProcessorEndpoint.NotReadyException -> {
                         Timber.d("Endpoint not ready yet. Re-queueing")
-                        reQueueMessage(message)
-                        resendDelayWait(SEND_FAILURE_NOT_READY_WAIT)
                         lastMessageStatus =
-                            LastMessageStatus.RetryableFailure(
-                                message.numberOfRetries,
-                                SEND_FAILURE_BACKOFF_INITIAL_WAIT,
-                            )
+                            if (reQueueMessage(message)) {
+                              resendDelayWait(SEND_FAILURE_NOT_READY_WAIT)
+                              LastMessageStatus.RetryableFailure(
+                                  message.numberOfRetries,
+                                  SEND_FAILURE_BACKOFF_INITIAL_WAIT,
+                              )
+                            } else {
+                              LastMessageStatus.PermanentFailure
+                            }
                       }
 
                       is MessageProcessorEndpoint.OutgoingMessageSendingException,
@@ -414,14 +444,15 @@ constructor(
                           is MQTTMessageProcessorEndpoint.NotConnectedException ->
                               Timber.w("MQTT not connected for message $message. Re-queueing")
                         }
-                        reQueueMessage(message)
-                        resendDelayWait(retryWait)
-
                         lastMessageStatus =
-                            if (retriesToGo <= 0) {
+                            if (!reQueueMessage(message)) {
+                              LastMessageStatus.PermanentFailure
+                            } else if (retriesToGo <= 0) {
+                              resendDelayWait(retryWait)
                               Timber.e("Ran out of retries for sending. Dropping message")
                               LastMessageStatus.PermanentFailure
                             } else {
+                              resendDelayWait(retryWait)
                               LastMessageStatus.RetryableFailure(
                                   retriesToGo - 1,
                                   (retryWait * 2).coerceAtMost(SEND_FAILURE_BACKOFF_MAX_WAIT).also {
@@ -499,19 +530,14 @@ constructor(
           }
 
   // Takes a message and sticks it on the head of the queue
-  private suspend fun reQueueMessage(message: MessageBase) {
-    if (!outgoingQueue.requeue(message)) {
-      val tailMessage = outgoingQueue.dequeue()
-      Timber.w(
-          "Queue full when trying to re-queue failed message. " +
-              "Dropping oldest message: $tailMessage",
+  internal suspend fun reQueueMessage(message: MessageBase): Boolean {
+    val requeued = outgoingQueue.requeue(message)
+    if (!requeued) {
+      Timber.e(
+          "Unable to persist failed message for retry; existing queued messages were preserved: $message"
       )
-      if (!outgoingQueue.requeue(message)) {
-        Timber.e(
-            "Couldn't restore failed message $message back onto the queue, dropping: ",
-        )
-      }
     }
+    return requeued
   }
 
   /**

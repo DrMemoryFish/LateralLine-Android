@@ -51,6 +51,7 @@ import org.owntracks.android.BaseApp.Companion.NOTIFICATION_CHANNEL_EVENTS
 import org.owntracks.android.BaseApp.Companion.NOTIFICATION_GROUP_EVENTS
 import org.owntracks.android.BaseApp.Companion.NOTIFICATION_ID_EVENT_GROUP
 import org.owntracks.android.BaseApp.Companion.NOTIFICATION_ID_ONGOING
+import org.owntracks.android.BuildConfig
 import org.owntracks.android.R
 import org.owntracks.android.data.repos.ContactsRepo
 import org.owntracks.android.data.repos.EndpointStateRepo
@@ -733,7 +734,7 @@ class BackgroundService : LifecycleService(), Preferences.OnPreferenceChangeList
       if (lastLocation != null && preferences.notificationLocation) {
             reverseGeocodedText.ifBlank { lastLocation!!.toLatLng().toDisplayString() }
           } else {
-            getString(R.string.app_name)
+            getString(R.string.travel_app_name)
           }
           .run(ongoingNotification::setTitle)
     } else {
@@ -821,14 +822,14 @@ class BackgroundService : LifecycleService(), Preferences.OnPreferenceChangeList
     const val BACKGROUND_LOCATION_RESTRICTION_NOTIFICATION_TAG = "backgroundRestrictionNotification"
 
     // NEW ACTIONS ALSO HAVE TO BE ADDED TO THE SERVICE INTENT FILTER
-    const val INTENT_ACTION_SEND_LOCATION_USER = "org.owntracks.android.SEND_LOCATION_USER"
-    const val INTENT_ACTION_SEND_EVENT_CIRCULAR = "org.owntracks.android.SEND_EVENT_CIRCULAR"
-    private const val INTENT_ACTION_CLEAR_NOTIFICATIONS =
-        "org.owntracks.android.CLEAR_EVENT_NOTIFICATIONS"
-    private const val INTENT_ACTION_CLEAR_CONTACTS = "org.owntracks.android.CLEAR_CONTACTS"
-    const val INTENT_ACTION_CHANGE_MONITORING = "org.owntracks.android.CHANGE_MONITORING"
-    private const val INTENT_ACTION_RESTART_AFTER_TASK_REMOVED =
-        "org.owntracks.android.RESTART_AFTER_TASK_REMOVED"
+    val INTENT_ACTION_SEND_LOCATION_USER = "${BuildConfig.APPLICATION_ID}.SEND_LOCATION_USER"
+    val INTENT_ACTION_SEND_EVENT_CIRCULAR = "${BuildConfig.APPLICATION_ID}.SEND_EVENT_CIRCULAR"
+    private val INTENT_ACTION_CLEAR_NOTIFICATIONS =
+        "${BuildConfig.APPLICATION_ID}.CLEAR_EVENT_NOTIFICATIONS"
+    private val INTENT_ACTION_CLEAR_CONTACTS = "${BuildConfig.APPLICATION_ID}.CLEAR_CONTACTS"
+    val INTENT_ACTION_CHANGE_MONITORING = "${BuildConfig.APPLICATION_ID}.CHANGE_MONITORING"
+    private val INTENT_ACTION_RESTART_AFTER_TASK_REMOVED =
+        "${BuildConfig.APPLICATION_ID}.RESTART_AFTER_TASK_REMOVED"
     private const val INTENT_ACTION_BOOT_COMPLETED = "android.intent.action.BOOT_COMPLETED"
     private const val INTENT_ACTION_PACKAGE_REPLACED = "android.intent.action.MY_PACKAGE_REPLACED"
     /**

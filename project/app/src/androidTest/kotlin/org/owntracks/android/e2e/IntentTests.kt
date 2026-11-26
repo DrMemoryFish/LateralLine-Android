@@ -15,6 +15,7 @@ import kotlin.time.Duration.Companion.seconds
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.owntracks.android.BuildConfig
 import org.owntracks.android.R
 import org.owntracks.android.model.Parser
 import org.owntracks.android.model.messages.MessageLocation
@@ -56,7 +57,7 @@ class IntentTests :
     ContextCompat.startForegroundService(
         app,
         Intent(app, BackgroundService::class.java).apply {
-          action = "org.owntracks.android.SEND_LOCATION_USER"
+          action = "${BuildConfig.APPLICATION_ID}.SEND_LOCATION_USER"
         },
     )
     packetReceivedIdlingResource.use(10.seconds) { Espresso.onIdle() }
@@ -84,7 +85,7 @@ class IntentTests :
     ContextCompat.startForegroundService(
         app,
         Intent(app, BackgroundService::class.java).apply {
-          action = "org.owntracks.android.CHANGE_MONITORING"
+          action = "${BuildConfig.APPLICATION_ID}.CHANGE_MONITORING"
         },
     )
 
@@ -105,7 +106,7 @@ class IntentTests :
     ContextCompat.startForegroundService(
         app,
         Intent(app, BackgroundService::class.java).apply {
-          action = "org.owntracks.android.CHANGE_MONITORING"
+          action = "${BuildConfig.APPLICATION_ID}.CHANGE_MONITORING"
           putExtra("monitoring", -1)
         },
     )

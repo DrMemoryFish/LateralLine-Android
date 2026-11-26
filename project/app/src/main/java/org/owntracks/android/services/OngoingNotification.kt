@@ -64,7 +64,7 @@ class OngoingNotification(private val context: Context, initialMode: MonitoringM
   }
   private var serviceNotificationState =
       ServiceNotificationState(
-          context.getString(R.string.app_name),
+          context.getString(R.string.travel_app_name),
           "",
           getMonitoringLabel(initialMode),
           false,
