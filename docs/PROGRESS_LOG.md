@@ -97,3 +97,48 @@ Append-only work journal for continuity. Entries remain oldest-to-newest. A pend
 - Next recommended step: proceed only when the Samsung Galaxy S24 is available for the active plan's deferred validation checklist.
 - Stop reason, if any: governance commit/push workflow complete after the single bookkeeping follow-up; S24 runtime validation remains deferred.
 - Recorded by: Codex
+
+### 2026-11-26 — Samsung Galaxy S24 validation resumed
+- Timestamp (UTC): 2026-11-26T18:04:20Z
+- Session goal: continue Travel Build v0 from the physical-device boundary without changing host implementation or official OwnTracks.
+- Completed: independently verified authorized device `R3CX300ZTFR` as Samsung `SM-S921B` on Android 16/API 36; confirmed current Android user 0 and preserved official OwnTracks 2.5.9 (`org.owntracks.android`, UID 10030, Google Play installer, existing data directory); installed the existing Travel Build APK successfully as `org.lateralline.android.travel.debug` 2.6.0 (UID 10427, distinct data directory/providers/actions); ran the physical-device `RoomBackedMessageQueueTest` class with 7/7 passing and both new full-queue non-eviction cases observed; reinstalled the travel APK after normal connected-test cleanup; reconfirmed both packages; and cold-launched the travel app into `WelcomeActivity`.
+- Evidence or artifacts: ADB device/package/dumpsys/activity output; APK SHA-256 `6ab0b5072e9d56ab2be359640e69e5fa9af603adcecf0787367b6edd27377b99`; `project/app/build/outputs/androidTest-results/connected/debug/flavors/gms/TEST-SM-S921B - 16-_app-gms.xml` reporting 7 tests with 0 failures/errors/skips; per-test logs for both full-queue cases.
+- Decisions referenced: DEC-0012 and DEC-0013; unchanged
+- Failures referenced: none; target-app removal was normal connected-test cleanup and official OwnTracks was unaffected
+- Open questions added or resolved: none
+- Entry commit: pending physical-validation checkpoint
+- Push status: not pushed; validation remains in progress
+- Validation state: automated device identity, coexistence/sandbox separation, installation, and targeted queue instrumentation passed. The phone is currently locked with `WelcomeActivity` focused behind the Samsung keyguard; permissions, visible identity, onboarding, tracking modes, real acquisition, endpoint compatibility, persistence/reconnect, shortcuts/config UI, and Samsung background lifecycle behavior remain unverified.
+- Next recommended step: owner unlocks the phone and leaves LateralLine Travel visible on its welcome screen, then Codex resumes UI-state inspection and the next feasible automated/manual checks.
+- Stop reason, if any: exact manual boundary reached—the Samsung lock screen prevents observing or completing onboarding.
+- Recorded by: Codex
+
+### 2026-11-26 — Samsung Galaxy S24 onboarding and permission validation
+- Timestamp (UTC): 2026-11-26T18:31:40Z
+- Session goal: continue the physical-device checklist through onboarding and Android permission setup while preserving official OwnTracks and avoiding unverified runtime claims.
+- Completed: owner unlocked the S24 and performed each directed UI action while Codex inspected the resulting screen and package state through ADB; completed the donor onboarding sequence; granted precise foreground location, background/all-the-time location, and notifications; verified all four runtime grants directly; followed `OPEN PREFERENCES` into the isolated travel app's Preferences screen; and observed the fresh MQTT Connection screen with TLS enabled and no host, username, or password configured.
+- Evidence or artifacts: ADB UI hierarchies for each onboarding/permission screen; `dumpsys package org.lateralline.android.travel.debug` showing `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`, `ACCESS_BACKGROUND_LOCATION`, and `POST_NOTIFICATIONS` granted; Preferences UI showing the Connection/Reporting/Configuration management surfaces; Connection UI showing MQTT mode, default port 8883, TLS enabled, and endpoint credentials not set.
+- Decisions referenced: DEC-0012 and DEC-0013; unchanged
+- Failures referenced: none
+- Open questions added or resolved: none; real endpoint details remain owner-held and are not recorded in governance files
+- Entry commit: pending physical-validation checkpoint
+- Push status: not pushed; validation remains in progress
+- Validation state: onboarding and permission paths passed on the S24. Endpoint compatibility, all tracking modes, real acquisition, queue persistence/restart, reconnect/drain and server receipt, shortcut/config behavior, and representative Samsung background lifecycle remain unverified.
+- Next recommended step: owner configures an available real HTTP or MQTT endpoint directly on the phone without sharing secrets in logs; Codex then verifies connection/status and continues the remaining device matrix.
+- Stop reason, if any: exact manual/credential boundary reached—the repository defines no test endpoint and the fresh install has no endpoint or credentials.
+- Recorded by: Codex
+
+### 2026-11-26 — S24 endpoint/mode validation and shortcut defect resolution
+- Timestamp (UTC): 2026-11-26T20:36:44Z
+- Session goal: continue the bounded Travel Build v0 device matrix, resolve the Samsung launcher shortcut defect without exposing internal activities, and preserve official OwnTracks plus existing Travel app state.
+- Completed: owner configured an HTTP endpoint without disclosing its value; verified a USER-triggered publish in Significant Changes mode and another in Manual mode each queued, received HTTP 200, and drained to endpoint queue 0; exercised Quiet, Manual, Significant Changes, and Move modes while retaining foreground-service/location registration evidence; confirmed Battery optimization whitelist remains `No`; confirmed both installed packages register for `owntracks:///config`; reproduced both static shortcuts failing from Samsung Launcher; identified direct non-exported activity targeting and an unresolved shortcut package resource token; replaced direct targets with two narrow exported aliases whose underlying activities remain private; added literal release/debug shortcut package overlays plus source and installed-package regression tests; rebuilt and update-installed the GMS debug APK; and physically verified from Samsung Launcher that `View logs` opens the Logs screen and `Preferences` opens the Preferences screen.
+- Evidence or artifacts: focused `ShortcutContractTest`; full `:app:ktfmtCheck`; successful `:app:assembleGmsDebug` and `:app:assembleGmsDebugAndroidTest`; merged manifest/resource inspection; installed `LauncherShortcutContractTest` 1/1 passed; Samsung Launcher foreground components and allowlisted screen-title booleans; final APK `/home/drmemoryfish/ChatGPT/LateralLine/project/app/build/outputs/apk/gms/debug/app-gms-debug.apk`, SHA-256 `dc2f7ab4d9c4cb70e1f167b2fc8db8e8af7251a3deb8ed87bdbf00aafa2f3f40`.
+- Decisions referenced: DEC-0012, DEC-0013, and DEC-0014; no material architecture decision changed
+- Failures referenced: FAIL-0002 and FAIL-0003
+- Open questions added or resolved: launcher shortcut contract resolved; representative Samsung background behavior and offline queue persistence/reconnect remain open validation work, not architecture questions
+- Entry commit: pending verified shortcut-resolution commit
+- Push status: not pushed; current implementation and validation records are uncommitted
+- Validation state: both Samsung Launcher shortcuts pass; official OwnTracks remains installed; Travel package identity, existing HTTP state, queue 0, four runtime grants, Move mode, and background-service presence survived update installation. Representative movement/background lifecycle, Samsung battery configuration, offline queue growth and restart persistence, reconnect/drain, and an actual configuration import remain unverified.
+- Next recommended step: complete the governed shortcut-resolution commit/push, then resume only the remaining physical-device validation boundary in the active plan.
+- Stop reason, if any: shortcut defect resolved at its governed commit boundary; broader Travel Build v0 device acceptance remains open.
+- Recorded by: Codex

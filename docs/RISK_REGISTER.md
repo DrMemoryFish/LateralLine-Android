@@ -70,8 +70,8 @@
 - Severity: high
 - Area: mobile donor behavior
 - Risk: changes break permissions, foreground services, sleep, network transitions, reconnect, location providers, geofencing, migrations, or manufacturer-specific behavior.
-- Evidence: donor source/history/tests and owner warning; Travel Build v0 GMS/OSS unit suites, Android-test compilation, lint task, and GMS APK assembly pass; recovery on 2026-11-26 confirmed the evidence survived and a fresh ADB probe again listed no attached device.
-- Validation state: verified risk; automated build/test evidence passed, physical S24 lifecycle validation deferred because no device was attached
+- Evidence: donor source/history/tests and owner warning; Travel Build v0 GMS/OSS unit suites, Android-test compilation, lint task, and GMS APK assembly pass; on 2026-11-26 the physical S24 passed coexistence installation, all 7 targeted Room queue device tests, onboarding and four runtime grants, the Quiet/Manual/Significant/Move selection matrix, two USER-triggered HTTP 200 publishes with queue drain, update-install state preservation, and both Samsung Launcher shortcut launches. The background service and location registration were directly present, but Battery optimization whitelist remains `No` and no representative movement/background window has completed.
+- Validation state: verified risk; automated build/test, S24 installation/instrumentation, permissions, tracking-mode selection, bounded acquisition/publish, endpoint, and shortcut evidence passed, while Samsung battery setup, offline restart/reconnect, OEM background lifecycle, and representative travel behavior remain in progress
 - Mitigation: narrow plans, source/history inspection, regression tests, and the still-required S24 validation checklist in the active plan.
 - Owner: each Android implementation plan
 - Review trigger: every donor behavior change

@@ -4,7 +4,7 @@
 - Plan name: Travel Build v0
 - Date started: 2026-11-24
 - Owner: project owner
-- Status: `implementation complete; Samsung Galaxy S24 validation deferred`
+- Status: `Samsung Galaxy S24 validation in progress; shortcut defect resolved, background/offline persistence checks remain`
 
 ## Purpose / Big Picture
 Produce an emergency-safe, separately installable GMS debug build for dense travel recording while preserving the OwnTracks donor's proven acquisition, tracking-mode, Room, HTTP, and MQTT behavior. Eliminate capacity-driven deletion without claiming that the transport queue is LateralLine's permanent history architecture.
@@ -120,6 +120,13 @@ Source/test edits and builds are rerunnable. Before resuming after interruption,
 - [x] 2026-11-24: passed focused and full GMS/OSS JVM tests, formatting, GMS lint task, Android-test compilation, GMS debug assembly, and APK signature/identity inspection; updated the plan and durable registers before sidecar reconciliation was interrupted.
 - [x] 2026-11-24: confirmed no Android device was attached at the final ADB gate and precisely deferred Samsung Galaxy S24 install/runtime validation below.
 - [x] 2026-11-26: resumed from pushed recovery commit `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c`, confirmed HEAD and `origin/travel-build-v0` match, revalidated the preserved APK/hash/identity/signature and generated evidence, rechecked that no Android device is attached, and reconciled the stale checkpoint sidecar without redoing completed implementation.
+- [x] 2026-11-26: verified connected/authorized `SM-S921B` serial `R3CX300ZTFR` on Android 16/API 36; confirmed official OwnTracks 2.5.9 remained installed as `org.owntracks.android`; installed LateralLine Travel 2.6.0 as the separate `org.lateralline.android.travel.debug` package and directly verified distinct UIDs, data directories, providers, actions, and launch activities.
+- [x] 2026-11-26: ran `RoomBackedMessageQueueTest` on the physical S24: 7 tests, 0 failures/errors/skips, including full-enqueue and full-requeue rejection preserving the two existing rows in order. Reinstalled the travel APK after the connected-test task's normal target-app cleanup and reconfirmed coexistence.
+- [x] 2026-11-26: completed the donor onboarding flow on the unlocked S24; directly observed the `LateralLine Travel` permission prompts and verified precise foreground location, background/all-the-time location, and notification grants through Android package state. Onboarding opened the isolated app's Preferences/Connection screen as intended.
+- [x] 2026-11-26: owner configured an HTTP endpoint directly on the phone; a USER-triggered publish in Significant Changes mode and another in Manual mode each queued, received HTTP 200, and drained to endpoint queue 0. No endpoint value or credential was recorded.
+- [x] 2026-11-26: exercised Quiet, Manual, Significant Changes, and Move selections; directly retained foreground-service and location-registration evidence and left Move selected. Representative movement/background capture remains pending and is not claimed.
+- [x] 2026-11-26: reproduced both Samsung Launcher shortcuts failing; resolved the external-launch contract with two narrow exported aliases while keeping Logs and Preferences activities private; corrected the unresolved shortcut package resource with release/debug overlays; passed focused host and installed-device contract tests; and physically verified both shortcuts open their intended Travel screens from Samsung Launcher.
+- [ ] 2026-11-26: Battery optimization whitelist is still `No`; Samsung battery/background setup, representative background/lifecycle travel behavior, offline queue growth plus process/restart persistence, reconnect/drain, and an actual configuration import remain.
 
 ## Surprises & Discoveries
 - The Room queue already rejects full enqueue/requeue without deletion; both eviction paths are caller behavior inherited from the earlier deque implementation.
@@ -129,32 +136,37 @@ Source/test edits and builds are rerunnable. Before resuming after interruption,
 - The configured SDK was missing Android platform 36 revision 2; Gradle installed it successfully before compilation.
 - A combined final Gradle invocation hit a formatter worker-daemon timeout; isolated single-worker retry and the final full formatting check passed. See FAIL-0001.
 - GMS lint remains configured with `abortOnError = false` and reports the donor backlog (233 errors, 338 warnings, 2 hints); no lint finding names the changed queue code, and the additive identity-resource warning was removed before the final run.
+- The connected Android-test task removes its target package during normal cleanup. Official OwnTracks remained installed; the travel APK was reinstalled immediately afterward before runtime validation.
+- Static launcher shortcuts are external launches even when they originate from the system launcher. Direct targets to private activities fail; Travel Build v0 now uses two exported aliases while keeping both internal activities non-exported.
+- Android 16 retained `@string/application_id` as a resource-token string inside the static shortcut intent. Build-type shortcut overlays now carry literal release/debug package identities, and an installed-device test verifies the resolved package/component/action contract. See FAIL-0003.
 
 ## Decision Log
 - DEC-0012 governs scope.
 - DEC-0013 defines the Travel Build v0 queue-full contract and minimal coexistence identity.
+- DEC-0014 governs this owner-authorized commit/bookkeeping/push boundary.
 
 ## Outcomes & Retrospective
 - Travel Build v0 implementation and host-side verification are complete. The app still uses the donor Room queue, acquisition/tracking-mode code, and HTTP/MQTT endpoints; no permanent-history, backend, identity, circles, sensor, or UI architecture was introduced.
 - Full GMS debug unit suite: 915 tests, 0 failures/errors/skips. Full OSS debug unit suite: 413 tests, 0 failures/errors/skips. Focused `MessageProcessorTest` and `MessageQueueModuleTest` also passed independently.
 - `:app:ktfmtCheck`, `:app:lintGmsDebug`, `:app:assembleGmsDebug`, and `:app:assembleGmsDebugAndroidTest` completed successfully. The Room capacity/non-eviction instrumentation tests compiled but could not run without a device.
 - APK: `/home/drmemoryfish/ChatGPT/LateralLine/project/app/build/outputs/apk/gms/debug/app-gms-debug.apk`
-- APK identity: `org.lateralline.android.travel.debug`; label `LateralLine Travel`; version `2.6.0` (`420600000`); SHA-256 `6ab0b5072e9d56ab2be359640e69e5fa9af603adcecf0787367b6edd27377b99`; valid Android debug v2 signature.
-- Direct APK inspection confirms isolated file/log provider authorities, isolated exported intent actions, variant-correct shortcut package targeting, and retained `owntracks://config` handling.
+- Current APK identity: `org.lateralline.android.travel.debug`; label `LateralLine Travel`; version `2.6.0` (`420600000`); SHA-256 `dc2f7ab4d9c4cb70e1f167b2fc8db8e8af7251a3deb8ed87bdbf00aafa2f3f40`; valid Android debug v2 signature.
+- Direct APK inspection confirms isolated file/log provider authorities, isolated exported intent actions, variant-correct shortcut package targeting, and retained `owntracks://config` handling. The corrected shortcut target contract is additionally verified through Android's installed `ShortcutManager`/`PackageManager` and Samsung Launcher.
 - No Samsung Galaxy S24 was attached when `/mnt/E/AI/Android/sdk/platform-tools/adb devices -l` was run at the final validation gate. Installation, permissions, OEM lifecycle, tracking-mode, real dense capture, persistence/restart, endpoint, reconnect/drain, and coexistence checks are therefore deferred rather than claimed.
 - Recovery on 2026-11-26 confirmed the clean interrupted checkpoint at `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c` is present on both local HEAD and `origin/travel-build-v0`. The preserved APK still has the recorded SHA-256, package, label, and valid v2 debug signature. A fresh ADB probe again listed no device, so the deferred S24 checklist remains the only incomplete acceptance boundary.
+- Physical validation resumed on 2026-11-26. Directly passed evidence now covers device identity/authorization, side-by-side installation and Android sandbox separation, retained official OwnTracks 2.5.9, all seven targeted Room queue instrumentation tests, onboarding, all four runtime grants, all four tracking-mode selections, two USER-triggered HTTP publishes with 200 responses and queue drain, update-install state preservation, and both Samsung Launcher shortcuts. Battery whitelist/background lifecycle, representative movement, offline queue restart persistence, reconnect/drain, and an actual configuration import are not yet claimed.
 
-### Deferred Samsung Galaxy S24 validation
-1. Attach the S24 with USB debugging enabled and confirm it appears in `/mnt/E/AI/Android/sdk/platform-tools/adb devices -l`.
-2. Confirm official OwnTracks remains installed, then install the APK without uninstalling either package: `/mnt/E/AI/Android/sdk/platform-tools/adb install -r /home/drmemoryfish/ChatGPT/LateralLine/project/app/build/outputs/apk/gms/debug/app-gms-debug.apk`.
-3. Verify both packages coexist (`org.owntracks.android` for official OwnTracks as applicable and `org.lateralline.android.travel.debug` for this build), and confirm the launcher/ongoing notification say `LateralLine Travel` with the distinct debug icon.
-4. Launch the travel build, grant notification, precise foreground location, and background/all-the-time location permissions, and apply the Samsung battery/background settings required for uninterrupted travel capture.
-5. Exercise Quiet, Manual, Significant, and Move modes; confirm manual publish and real location acquisition behave as before. Use the owner's dense Move interval, max-frequency, and accuracy preferences without treating them as new defaults.
-6. Configure and smoke-test the available real HTTP and/or MQTT endpoint. Confirm OwnTracks payload/topic compatibility and that official OwnTracks remains independently configured.
-7. Disconnect networking, collect a representative dense sequence, confirm queue length grows, swipe/restart and then process-restart the app, and confirm the queued count/history survives. Reconnect and verify retry/drain plus server receipt without unexpected gaps or reordering.
-8. Run the safe small-capacity device regression tests rather than attempting to fill five million rows: from `project/`, run `./gradlew :app:connectedGmsDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=org.owntracks.android.data.repos.RoomBackedMessageQueueTest`. Confirm both full-enqueue and full-requeue tests reject the attempted message while preserving the two existing rows in order.
-9. Verify the log and settings launcher shortcuts open this package, `owntracks://config` still offers/imports into the intended app, and external control actions use the `org.lateralline.android.travel.debug.*` names when enabled/authenticated.
-10. Monitor app storage, queue length, battery behavior, and OEM kills during a representative travel window; stop using the build and preserve logs if storage pressure, queue corruption, restart loss, or background-acquisition regression appears.
+### Samsung Galaxy S24 validation checklist
+1. [x] Attach and authorize the S24; confirm model, Android/API level, and ADB identity.
+2. [x] Preserve official OwnTracks and update-install the Travel APK without wiping Travel data.
+3. [x] Verify both packages coexist and retain separate Android sandboxes/identities.
+4. [ ] Runtime grants are complete; apply the remaining Samsung battery/background settings before representative background capture. Battery optimization whitelist currently reports `No`.
+5. [ ] Quiet, Manual, Significant, and Move selection plus manual acquisition/publish are complete; representative physical movement/dense background capture remains.
+6. [x] Smoke-test the available real HTTP endpoint without recording its value; two USER-triggered publishes received 200 and drained to queue 0. MQTT was not the configured available transport and is not separately claimed.
+7. [ ] Disconnect networking, grow the queue, verify swipe/process/restart persistence, reconnect, and verify drain/server receipt without unexpected gaps or reordering.
+8. [x] Run the safe small-capacity Room device regression tests: 7/7 passed, including both full-queue preservation cases.
+9. [ ] Both Samsung Launcher shortcuts now pass and both apps register for `owntracks:///config`; an actual configuration import and authenticated external-control exercise remain.
+10. [ ] Monitor storage, queue length, battery behavior, and OEM kills during a representative travel window; stop and preserve evidence on pressure, corruption, restart loss, or background-acquisition regression.
 
 ## Checkpoint Manifest
 - Sidecar: `plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json`
