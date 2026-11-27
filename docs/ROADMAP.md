@@ -4,10 +4,10 @@ Last reviewed: 2026-11-27
 Roadmap status: `active high-level sequencing; post-travel order remains revisable`
 
 ## Snapshot
-- Current live frontier: Travel Build v0 reached its bounded acceptance boundary; its final governed commit/bookkeeping is in progress.
+- Current live frontier: Travel Build v0 reached its bounded acceptance boundary and substantive final commit `90cba8c37bd15a1ddd5e32e8f02e4dded0c3f42e` is pushed; no later milestone is active.
 - Current active plan: `plans/ACTIVE/2026-11-24_travel-build-v0.md`.
 - Current blockers: none inside Travel Build v0; its named movement-mode limitation and security-sensitive configuration/control deferrals are recorded rather than overclaimed.
-- Next recommended milestone: stop after the Travel Build v0 final commit and await explicit owner direction; do not begin permanent history or any later architecture from this roadmap alone.
+- Next recommended milestone: await explicit owner direction; do not begin permanent history or any later architecture from this roadmap alone.
 
 ## Major Completed Milestones
 - [x] OwnTracks donor repository established at the recorded inception commit.

@@ -152,9 +152,9 @@ Append-only work journal for continuity. Entries remain oldest-to-newest. A pend
 - Decisions referenced: DEC-0012, DEC-0013, and DEC-0014; no architecture or product behavior decision changed.
 - Failures referenced: FAIL-0002 recurrence and containment; FAIL-0003 remained resolved with no shortcut regression.
 - Open questions added or resolved: no architecture question added. The Move-to-Significant transition during the long window remains unattributed because the owner is unsure whether the mode action was used; later force-stop and device-reboot checks preserved Move, so the event is recorded as a validation limitation rather than a reproduced defect.
-- Entry commit: pending final Travel Build v0 acceptance commit; `final_commit_hash` remains null until that commit exists.
-- Push status: current acceptance reconciliation is uncommitted and unpushed; existing HEAD `996dd4cab9868afeeb214e44dc90a26d83626298` matches `origin/travel-build-v0` before this final workflow.
+- Entry commit: substantive final Travel Build v0 acceptance commit `90cba8c37bd15a1ddd5e32e8f02e4dded0c3f42e`, created by Codex at 2026-11-27T19:16:09Z.
+- Push status: `90cba8c37bd15a1ddd5e32e8f02e4dded0c3f42e` is pushed to `origin/travel-build-v0`; this entry, the plan status, roadmap wording, decision follow-ups, and checkpoint hash form the single non-recursive bookkeeping follow-up whose own hash/push are verified directly from Git under DEC-0014.
 - Validation state: Travel Build v0's bounded acceptance criteria are satisfied with direct S24 evidence or precise deferral. The 5+ hour period is not claimed as a clean long-window Move/dense-capture pass, and actual configuration import/authenticated external control are not claimed because external configuration and intent control are disabled and no safe owner-provided authenticated fixture exists.
-- Next recommended step: run governance validation, create and push the final substantive commit, record its real hash in one non-recursive bookkeeping follow-up, verify remote equality and a clean worktree, then await explicit owner direction.
-- Stop reason, if any: no remaining in-scope implementation or device blocker; only the governed final commit/bookkeeping boundary remains.
+- Next recommended step: await explicit owner direction; do not begin the permanent history architecture or any later roadmap milestone from this completion alone.
+- Stop reason, if any: Travel Build v0's bounded implementation, device validation, substantive commit, and push are complete; this is the one permitted bookkeeping follow-up.
 - Recorded by: Codex

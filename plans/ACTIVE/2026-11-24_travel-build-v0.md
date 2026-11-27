@@ -4,7 +4,7 @@
 - Plan name: Travel Build v0
 - Date started: 2026-11-24
 - Owner: project owner
-- Status: `Travel Build v0 acceptance complete with named device-validation limitations and security-sensitive exercises deferred; final governed commit pending`
+- Status: `complete — bounded Travel Build v0 accepted with named device-validation limitations and security-sensitive exercises deferred`
 
 ## Purpose / Big Picture
 Produce an emergency-safe, separately installable GMS debug build for dense travel recording while preserving the OwnTracks donor's proven acquisition, tracking-mode, Room, HTTP, and MQTT behavior. Eliminate capacity-driven deletion without claiming that the transport queue is LateralLine's permanent history architecture.
@@ -165,6 +165,7 @@ Source/test edits and builds are rerunnable. Before resuming after interruption,
 - Physical validation resumed on 2026-11-26. Directly passed evidence now covers device identity/authorization, side-by-side installation and Android sandbox separation, retained official OwnTracks 2.5.9, all seven targeted Room queue instrumentation tests, onboarding, all four runtime grants, all four tracking-mode selections, two USER-triggered HTTP publishes with 200 responses and queue drain, update-install state preservation, and both Samsung Launcher shortcuts. Battery whitelist/background lifecycle, representative movement, offline queue restart persistence, reconnect/drain, and an actual configuration import are not yet claimed.
 - The final 2026-11-27 device boundary passed Samsung Unrestricted/battery exemption, service/process/location survival through backgrounding and reboot, offline queue retention across UI/process/device restart, HTTP reconnect/drain to queue 0, and ordered timestamp evidence without observed deletion or delivery error. Official OwnTracks remained installed and untouched; final Travel state is Move, queue 0, HTTP 200, both original network transports enabled, and battery exemption active.
 - Travel Build v0 therefore satisfies its bounded acceptance rule with two explicit limitations: the 5+ hour window is not claimed as a clean Move/dense-capture pass because the return mode was Significant and attribution is unknown, and actual configuration import/authenticated external control are deferred because their security gates are disabled and no safe owner-held fixture was supplied. No permanent history, backend, identity, synchronization, circles, UI, or sensor work is authorized by this completion.
+- Final substantive acceptance commit: `90cba8c37bd15a1ddd5e32e8f02e4dded0c3f42e`, created and pushed to `origin/travel-build-v0` on 2026-11-27 under DEC-0014. The following bookkeeping commit records that real Git evidence without redefining the final implementation boundary.
 
 ### Samsung Galaxy S24 validation checklist
 1. [x] Attach and authorize the S24; confirm model, Android/API level, and ADB identity.
