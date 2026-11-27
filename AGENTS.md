@@ -23,7 +23,7 @@ LateralLine is a self-hostable, offline-first, privacy-focused location platform
 - Do not add top-level files or directories unless `docs/REPO_MAP.md` permits them or change control approves them.
 
 ## Current Frontier
-The first implementation frontier is **Travel Build v0**, governed by `plans/ACTIVE/2026-11-24_travel-build-v0.md`. It is a transitional donor safety milestone, not authorization to redesign the client or implement the long-term backend, identity, synchronization, circles, UX, or sensor architecture.
+The first implementation frontier, **Travel Build v0**, reached its bounded acceptance boundary on 2026-11-27 and is governed by `plans/ACTIVE/2026-11-24_travel-build-v0.md`. It remains a transitional donor safety milestone, not authorization to redesign the client or begin the long-term history, backend, identity, synchronization, circles, UX, or sensor architecture. A later milestone requires explicit owner direction and its own plan.
 
 ## Routing
 - durable guidance and registers -> `docs/`
@@ -32,4 +32,3 @@ The first implementation frontier is **Travel Build v0**, governed by `plans/ACT
 - generated evidence -> `artifacts/`
 - retired/superseded support surfaces -> `archive/`
 - stable repeated workflows -> `skills/`
-

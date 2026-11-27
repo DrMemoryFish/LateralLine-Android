@@ -23,13 +23,13 @@
 ## Active Risks
 ### R-0001: `Destructive donor queue overflow`
 - Date recorded (UTC): 2026-11-24
-- Last reviewed (UTC): 2026-11-26
+- Last reviewed (UTC): 2026-11-27
 - Status: mitigated
 - Severity: high
 - Area: Travel Build v0
 - Risk: a full queue causes the caller to dequeue an oldest persisted item when admitting a new or failed/requeued message.
-- Evidence: the prior `MessageProcessor.queueMessageForSending` and `reQueueMessage` eviction calls were observed and removed; focused JVM tests verify both caller paths never call `dequeue()` on rejection, and small-capacity Room instrumentation tests cover row preservation/order.
-- Validation state: source and JVM regression coverage verified; Room instrumentation test compiled but device execution deferred because no Android device was attached
+- Evidence: the prior `MessageProcessor.queueMessageForSending` and `reQueueMessage` eviction calls were observed and removed; focused JVM tests verify both caller paths never call `dequeue()` on rejection; and the seven-test small-capacity Room class passed on the physical S24 with both full-enqueue and full-requeue cases preserving the two existing rows in order.
+- Validation state: mitigated in Travel Build v0 by source, JVM regression coverage, physical Room instrumentation, and a bounded offline persistence/reconnect exercise with no observed queue clear, persistence error, or delivery drop
 - Mitigation: Travel Build v0 rejects full writes, logs the failure, balances rejected enqueue accounting, and preserves all already-persisted rows.
 - Owner: active Travel Build v0 plan
 - Review trigger: implementation/test completion
@@ -65,14 +65,14 @@
 
 ### R-0004: `Android background and lifecycle regression`
 - Date recorded (UTC): 2026-11-24
-- Last reviewed (UTC): 2026-11-26
+- Last reviewed (UTC): 2026-11-27
 - Status: open
 - Severity: high
 - Area: mobile donor behavior
 - Risk: changes break permissions, foreground services, sleep, network transitions, reconnect, location providers, geofencing, migrations, or manufacturer-specific behavior.
-- Evidence: donor source/history/tests and owner warning; Travel Build v0 GMS/OSS unit suites, Android-test compilation, lint task, and GMS APK assembly pass; on 2026-11-26 the physical S24 passed coexistence installation, all 7 targeted Room queue device tests, onboarding and four runtime grants, the Quiet/Manual/Significant/Move selection matrix, two USER-triggered HTTP 200 publishes with queue drain, update-install state preservation, and both Samsung Launcher shortcut launches. The background service and location registration were directly present, but Battery optimization whitelist remains `No` and no representative movement/background window has completed.
-- Validation state: verified risk; automated build/test, S24 installation/instrumentation, permissions, tracking-mode selection, bounded acquisition/publish, endpoint, and shortcut evidence passed, while Samsung battery setup, offline restart/reconnect, OEM background lifecycle, and representative travel behavior remain in progress
-- Mitigation: narrow plans, source/history inspection, regression tests, and the still-required S24 validation checklist in the active plan.
+- Evidence: donor source/history/tests and owner warning; Travel Build v0 GMS/OSS unit suites, Android-test compilation, lint task, and GMS APK assembly pass. Physical S24 evidence covers coexistence, all 7 targeted Room tests, four runtime grants, all four mode selections, HTTP 200 publishing, state-preserving update install, both launcher shortcuts, Samsung Unrestricted/battery exemption, process/service/location survival through UI backgrounding and reboot, and offline queue persistence plus reconnect/drain. The owner-reported 5+ hour movement window retained only its final 35.5 minutes of logs and returned in Significant after a Move baseline; attribution is unknown.
+- Validation state: verified ongoing donor risk; this bounded build passed the exercised automated and physical lifecycle paths, but the long window is not a clean Move/dense-capture proof and no short validation can establish general travel reliability
+- Mitigation: narrow plans, source/history inspection, regression tests, command-boundary privacy filtering, retained battery exemption, and precise limitations in the completed S24 checklist. Revalidate on every later Android behavior change.
 - Owner: each Android implementation plan
 - Review trigger: every donor behavior change
 - Recorded by: Codex
@@ -191,14 +191,14 @@
 
 ### R-0013: `Travel queue storage and performance pressure`
 - Date recorded (UTC): 2026-11-24
-- Last reviewed (UTC): 2026-11-26
+- Last reviewed (UTC): 2026-11-27
 - Status: open
 - Severity: medium
 - Area: Travel Build v0
 - Risk: allowing up to 5,000,000 Room rows can consume substantial device storage and may affect queue startup, backup, query, and drain performance before the permanent history architecture exists.
-- Evidence: Travel Build v0 deliberately raises the injected capacity from 100,000 to 5,000,000; recovery on 2026-11-26 reconfirmed the capacity in source and preserved APK/build evidence, but no representative multi-million-row S24 benchmark has been run.
-- Validation state: capacity and build directly verified; performance magnitude unknown
+- Evidence: Travel Build v0 deliberately raises the injected capacity from 100,000 to 5,000,000; recovery reconfirmed source/APK/build evidence, and the 2026-11-27 S24 exercise retained and drained a bounded backlog that reached at least 55 records without observed corruption or persistence error. No representative multi-million-row benchmark has been run.
+- Validation state: capacity, build, bounded physical persistence, and drain directly verified; storage/startup/drain performance at scale remains unknown
 - Mitigation: treat the build as transitional, monitor queue length/storage during travel, preserve free space, and design/benchmark the permanent durable-history model separately.
 - Owner: project owner and future durable-history plan
-- Review trigger: S24 dense-capture validation, large backlog evidence, low-storage warning, or permanent history design
+- Review trigger: large backlog evidence, low-storage warning, or permanent history design
 - Recorded by: Codex

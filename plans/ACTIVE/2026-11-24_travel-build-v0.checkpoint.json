@@ -1,10 +1,66 @@
 {
-  "phase_name": "Travel Build v0 shortcut defect resolution and continued Samsung validation",
-  "phase_status": "shortcut_verified_background_and_offline_persistence_pending",
-  "commit_ready": false,
-  "intended_commit_scope": [],
+  "phase_name": "Travel Build v0 final Samsung acceptance and governed closeout",
+  "phase_status": "physical_validation_complete_final_commit_pending",
+  "commit_ready": true,
+  "intended_commit_scope": [
+    {
+      "path": "AGENTS.md",
+      "bucket": "commit_now",
+      "reason": "Reconcile the repository entry-point frontier after bounded Travel Build v0 acceptance."
+    },
+    {
+      "path": "docs/DECISION_LOG.md",
+      "bucket": "commit_now",
+      "reason": "Record DEC-0012 and DEC-0013 validation updates without changing their decisions."
+    },
+    {
+      "path": "docs/FAILURE_LOG.md",
+      "bucket": "commit_now",
+      "reason": "Record the FAIL-0002 output-minimization recurrence and verified command-boundary containment."
+    },
+    {
+      "path": "docs/PROGRESS_LOG.md",
+      "bucket": "commit_now",
+      "reason": "Append the dated final S24 lifecycle, offline persistence, reconnect, and deferral evidence."
+    },
+    {
+      "path": "docs/PROJECT_BRIEF.md",
+      "bucket": "commit_now",
+      "reason": "Replace the stale no-device current milestone with observed bounded S24 acceptance."
+    },
+    {
+      "path": "docs/RISK_REGISTER.md",
+      "bucket": "commit_now",
+      "reason": "Re-review queue, lifecycle, and scale risks against physical-device evidence and limitations."
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "bucket": "commit_now",
+      "reason": "Mark milestone 1 at its bounded acceptance boundary without authorizing milestone 2."
+    },
+    {
+      "path": "plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json",
+      "bucket": "commit_now",
+      "reason": "Describe the actual final governance scope while keeping final_commit_hash null until Git creates it."
+    },
+    {
+      "path": "plans/ACTIVE/2026-11-24_travel-build-v0.md",
+      "bucket": "commit_now",
+      "reason": "Reconcile the final device checklist, evidence, limitations, security-sensitive deferrals, and acceptance state."
+    }
+  ],
   "introduced_files": [],
-  "modified_files": [],
+  "modified_files": [
+    "AGENTS.md",
+    "docs/DECISION_LOG.md",
+    "docs/FAILURE_LOG.md",
+    "docs/PROGRESS_LOG.md",
+    "docs/PROJECT_BRIEF.md",
+    "docs/RISK_REGISTER.md",
+    "docs/ROADMAP.md",
+    "plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json",
+    "plans/ACTIVE/2026-11-24_travel-build-v0.md"
+  ],
   "expected_artifacts": [
     "project/app/build/outputs/apk/gms/debug/app-gms-debug.apk",
     "project/app/build/outputs/apk/androidTest/gms/debug/app-gms-debug-androidTest.apk",
@@ -12,18 +68,32 @@
     "project/app/build/outputs/androidTest-results/connected/debug/flavors/gms/TEST-SM-S921B - 16-_app-gms.xml"
   ],
   "expected_durable_reports": [
+    "AGENTS.md",
+    "docs/DECISION_LOG.md",
     "docs/FAILURE_LOG.md",
     "docs/PROGRESS_LOG.md",
+    "docs/PROJECT_BRIEF.md",
     "docs/RISK_REGISTER.md",
+    "docs/ROADMAP.md",
     "plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json",
     "plans/ACTIVE/2026-11-24_travel-build-v0.md"
   ],
   "expected_noncommitted_generated_outputs": [
-    "Gradle build/test outputs under ignored project build directories",
-    "Temporary redacted/minimized ADB UI evidence outside the repository"
+    "Ignored Gradle build/test outputs under project build directories",
+    "Temporary minimized ADB evidence outside the repository"
   ],
-  "remaining_dirty_expected": [],
+  "remaining_dirty_expected": [
+    "AGENTS.md",
+    "docs/DECISION_LOG.md",
+    "docs/FAILURE_LOG.md",
+    "docs/PROGRESS_LOG.md",
+    "docs/PROJECT_BRIEF.md",
+    "docs/RISK_REGISTER.md",
+    "docs/ROADMAP.md",
+    "plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json",
+    "plans/ACTIVE/2026-11-24_travel-build-v0.md"
+  ],
   "remaining_dirty_unexpected": [],
-  "push_status": "Substantive shortcut-resolution commit 18582d1a11d1aafeff86363259770d8e91156e80 pushed to origin/travel-build-v0; the single bookkeeping follow-up is verified directly from Git at handoff under DEC-0014",
+  "push_status": "Existing HEAD 996dd4cab9868afeeb214e44dc90a26d83626298 is pushed to origin/travel-build-v0; current final acceptance reconciliation is uncommitted and unpushed",
   "final_commit_hash": null
 }

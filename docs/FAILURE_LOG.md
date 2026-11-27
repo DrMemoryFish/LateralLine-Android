@@ -53,6 +53,8 @@ Append-only record for failed assumptions, regressions, misleading artifacts, an
 - Required regression coverage: procedural rather than application code; retain this minimization rule for all location-device validation.
 - Follow-up owner: every physical-device validation task
 - Recorded by: Codex
+- Recurrence update (UTC): 2026-11-27 — during continued S24 validation, a raw broad `dumpsys activity activities` payload reached the transcript and included unrelated third-party device metadata. The private values are intentionally not reproduced here. The owner reasserted command-boundary minimization: broad Android output must be redirected or parsed before transcript emission.
+- Recurrence containment (UTC): 2026-11-27 — all subsequent broad UI, activity, package, location, connectivity, notification, preference, and log surfaces were either redirected to temporary files or piped through allowlist parsers; transcript output was limited to Travel component names, booleans, counts, mode names, queue counts, HTTP status codes/classes, and error classes. No further recurrence was observed through the final device boundary.
 
 ### 2026-11-26 - FAIL-0003
 - Date recorded (UTC): 2026-11-26

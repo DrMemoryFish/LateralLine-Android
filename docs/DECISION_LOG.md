@@ -214,6 +214,8 @@ For DEC-0001 through DEC-0012, event date `2026-10-10` records when the owner su
 - Follow-up actions: execute the active plan as the next mission.
 - Validation update (UTC): 2026-11-26 — checkpoints 1–4 are implemented and host-verified in recovery commit `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c`; physical Samsung Galaxy S24 validation remains deferred because no device is attached.
 - Current follow-up (UTC): execute the active plan's deferred S24 checklist; this decision still does not authorize permanent history, backend, identity, synchronization, circles, UI, or sensor architecture.
+- Validation update (UTC): 2026-11-27 — the bounded S24 acceptance boundary is complete. Direct evidence covers side-by-side installation, physical queue regression tests, permissions, mode selection, HTTP 2xx publishing, shortcuts, battery exemption, background/reboot survival, and offline queue persistence/reconnect/drain. The plan records the unattributed Move-to-Significant transition as a limitation and precisely defers security-gated configuration import/authenticated external control; neither is represented as a pass.
+- Current follow-up (UTC): create and push the final governed Travel Build v0 commit/bookkeeping, then await explicit owner direction. This decision still does not authorize permanent history, backend, identity, synchronization, circles, UI, or sensor architecture.
 - Recorded by: Codex
 
 ### 2026-11-24 - DEC-0013
@@ -231,6 +233,8 @@ For DEC-0001 through DEC-0012, event date `2026-10-10` records when the owner su
 - Follow-up actions: implement checkpoints 2–4, verify the GMS debug APK, and record direct versus deferred S24 evidence.
 - Validation update (UTC): 2026-11-26 — implementation, focused/full host tests, formatting, lint task, Android-test compilation, GMS debug assembly, and direct APK identity/signature inspection are complete in recovery commit `f2d98fc9e8ffca1cdf4b7309b9040e8a01c9eb2c`; the preserved APK was rechecked after interruption. Device-only lifecycle, coexistence, endpoint, persistence/reconnect, and instrumentation execution remain deferred.
 - Current follow-up (UTC): execute the active plan's deferred Samsung Galaxy S24 validation checklist; do not expand this bounded decision into permanent architecture work.
+- Validation update (UTC): 2026-11-27 — the S24 ran all seven focused Room tests with no failures, retained official OwnTracks alongside the Travel identity, and passed the bounded lifecycle/offline persistence/reconnect checks recorded in the active plan. No capacity-driven deletion, queue clear, persistence error, delivery drop, or timestamp-order decrease was observed in the exercised path.
+- Current follow-up (UTC): close Travel Build v0 through DEC-0014's governed final commit and non-recursive bookkeeping only; do not expand this bounded decision into permanent architecture work.
 - Recorded by: Codex
 
 ### 2026-11-26 - DEC-0014
