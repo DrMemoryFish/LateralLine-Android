@@ -1,31 +1,8 @@
 {
   "phase_name": "Post-Travel architecture and governance consolidation",
-  "phase_status": "content_reconciled_remote_application_validated_commit_pending",
-  "commit_ready": true,
-  "intended_commit_scope": [
-    "AGENTS.md",
-    "README.md",
-    "CI.md",
-    "docs/GOVERNANCE_NAVIGATION.md",
-    "docs/AUTHORITY_MATRIX.md",
-    "docs/REPO_MAP.md",
-    "docs/TASK_PROTOCOL.md",
-    "docs/QUALITY_BAR.md",
-    "docs/PROJECT_BRIEF.md",
-    "docs/PLATFORM_ARCHITECTURE.md",
-    "docs/ROADMAP.md",
-    "docs/TERMINOLOGY.md",
-    "docs/DECISION_LOG.md",
-    "docs/OPEN_QUESTIONS.md",
-    "docs/RISK_REGISTER.md",
-    "docs/FAILURE_LOG.md",
-    "docs/PROGRESS_LOG.md",
-    "docs/REFERENCES.md",
-    "docs/DATA_FLOW_DESIGN.md",
-    "plans/ACTIVE/2026-11-24_travel-build-v0.md",
-    "plans/ACTIVE/2026-11-27_post-travel-architecture-consolidation.md",
-    "plans/ACTIVE/2026-11-27_post-travel-architecture-consolidation.checkpoint.json"
-  ],
+  "phase_status": "complete_committed_pushed",
+  "commit_ready": false,
+  "intended_commit_scope": [],
   "introduced_files": [
     "docs/PLATFORM_ARCHITECTURE.md",
     "plans/ACTIVE/2026-11-27_post-travel-architecture-consolidation.md",
@@ -71,6 +48,6 @@
   ],
   "remaining_dirty_expected": [],
   "remaining_dirty_unexpected": [],
-  "push_status": "Substantive consolidation commit/push pending after restored GitHub write access and base revalidation",
-  "final_commit_hash": null
+  "push_status": "Substantive consolidation commit 39489126660700271696bbfe1646d1a0254e61f1 pushed to origin/travel-build-v0; this bookkeeping follow-up records the actual hash under DEC-0014",
+  "final_commit_hash": "39489126660700271696bbfe1646d1a0254e61f1"
 }

@@ -3,7 +3,7 @@
 - Plan name: Post-Travel Architecture And Governance Consolidation
 - Date started: 2026-11-27
 - Owner: project owner
-- Status: `documentation content reconciled; remote write access restored and verified; substantive commit/bookkeeping pending; no runtime implementation authorized`
+- Status: `complete; consolidation committed and pushed; no runtime implementation authorized`
 
 ## Purpose / Big Picture
 Reconcile the complete owner/ChatGPT discussion after the final Travel Build v0 Codex turn into authoritative repository knowledge so later work does not depend on reconstructing chat history. Preserve the completed Travel Build boundary, record post-completion source audit findings accurately, establish the agreed long-term platform/data contracts, refine roadmap/navigation/dependencies, and leave genuinely consequential implementation choices open.
@@ -81,7 +81,7 @@ Stop only for material authority conflict, duplicate owner surface, or unresolve
 - [x] architecture/register/roadmap/navigation consolidation content and coverage matrix prepared.
 - [x] repository write access reverified by a successful Git-data write probe; live `travel-build-v0` remained at the prepared base and all 19 pinned source/document blob SHAs plus three expected-absent files revalidated with no drift.
 - [x] exact bundle transformations assembled for remote application and documentation-only path scope revalidated.
-- [ ] substantive documentation commit/push and checkpoint final hash recorded — pending governed Git commit/push.
+- [x] substantive documentation commit `39489126660700271696bbfe1646d1a0254e61f1` created and pushed; checkpoint final hash recorded in the single DEC-0014 bookkeeping follow-up.
 
 ## Outcomes & Retrospective
-The content boundary is complete enough to apply without reinterpreting chat. The earlier GitHub write limitation was resolved after the owner reconnected the integration; actual write capability and the prepared base were reverified before application. No runtime source or dependency is part of this mission.
+The complete post-Travel discussion consolidation was applied from the prepared bundle after remote write access and every pinned base/source revision were reverified. Substantive documentation commit `39489126660700271696bbfe1646d1a0254e61f1` was pushed to `origin/travel-build-v0`. The diff is documentation/governance/planning only; no runtime source or dependency changed. Readiness Gate A and Durable Local History v1 remain unstarted and require their own owner-authorized implementation plan.
