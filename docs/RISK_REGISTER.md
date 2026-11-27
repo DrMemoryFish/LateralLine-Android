@@ -194,6 +194,19 @@
 - Last reviewed (UTC): 2026-11-27
 - Status: open
 - Severity: medium
+- Area: Travel Build v0 / current safety envelope
+- Risk: allowing up to 5,000,000 Room rows can consume substantial device storage and degrade insert/dequeue/startup/reboot/drain behavior long before the configured ceiling; a capacity constant is not an operational guarantee.
+- Evidence: Travel Build raises injected capacity from 100,000 to 5,000,000; bounded S24 exercise retained/drained only a small backlog (at least 55 records). No representative multi-million-row benchmark has been run.
+- Validation state: configuration and small physical persistence/drain verified; million-scale storage/performance/battery/recovery magnitude unknown.
+- Mitigation: characterize the current Travel safety envelope with realistic synthetic trajectories at multiple scales through the 5,000,000 and capacity+1 boundaries. Measure DB/WAL/file size, insert/dequeue tail latency, memory, initialization/startup/reboot, drain throughput, persistent failure/retry, network flapping, process death, low/full disk, ordering, and battery/thermal behavior where material. Use smaller representative real-device endurance tests alongside synthetic scale. Do not spend disproportionate effort optimizing this transitional queue if durable local history is the better architectural fix.
+- Owner: post-Travel readiness gate and future durable-history plan
+- Review trigger: benchmark results, low-storage warning, next travel reliance, or permanent-history design
+- Recorded by: Codex; 2026-11-27 review expanded by ChatGPT consolidation under owner instruction
+
+- Date recorded (UTC): 2026-11-24
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: medium
 - Area: Travel Build v0
 - Risk: allowing up to 5,000,000 Room rows can consume substantial device storage and may affect queue startup, backup, query, and drain performance before the permanent history architecture exists.
 - Evidence: Travel Build v0 deliberately raises the injected capacity from 100,000 to 5,000,000; recovery reconfirmed source/APK/build evidence, and the 2026-11-27 S24 exercise retained and drained a bounded backlog that reached at least 55 records without observed corruption or persistence error. No representative multi-million-row benchmark has been run.
@@ -202,3 +215,143 @@
 - Owner: project owner and future durable-history plan
 - Review trigger: large backlog evidence, low-storage warning, or permanent history design
 - Recorded by: Codex
+
+### R-0014: `Transport queue still contains loss windows outside full-capacity eviction`
+- Date recorded (UTC): 2026-11-27
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: high
+- Area: current Travel/donor persistence
+- Risk: Travel Build fixed capacity-driven eviction but the outgoing queue can still lose the only queued copy through dequeue-before-send process/power loss, requeue failure after dequeue, preference-triggered queue clear, deserialization/corruption deletion, or partial legacy migration cleanup.
+- Evidence: direct current source review of `MessageProcessor.kt` and `RoomBackedMessageQueue.kt`; the completed Travel plan already noted dequeue-before-send and configuration queue-clear concerns.
+- Validation state: source-confirmed mechanisms; not all failure windows have been physically reproduced.
+- Mitigation: never promote the queue to master history; preserve canonical history before transport; use preservation-safe quarantine/migration behavior; add focused failure tests to readiness/history work.
+- Owner: post-Travel hardening and Durable Local History plans
+- Review trigger: any queue/history/migration change or before relying on Travel as lossless recorder
+- Recorded by: ChatGPT consolidation
+
+### R-0015: `Persistent transport failure can starve newer data`
+- Date recorded (UTC): 2026-11-27
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: high
+- Area: current sender/retry
+- Risk: broken retry-budget state plus head-slot requeue can repeatedly select one failing message and block newer regular records, undermining live progress and making logged retry/drop semantics unreliable.
+- Evidence: FAIL-0004 direct source audit.
+- Validation state: source-confirmed; runtime regression pending.
+- Mitigation: bounded retry-state hardening and deterministic failure tests; long-term live/history scheduling independent of a single FIFO/head-retry path.
+- Owner: post-Travel readiness gate
+- Review trigger: before next travel reliance or synchronization work
+- Recorded by: ChatGPT consolidation
+
+### R-0016: `Capture/persistence success state can be false`
+- Date recorded (UTC): 2026-11-27
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: high
+- Area: current location pipeline
+- Risk: a queue write may fail while `LocationProcessor` reports publish success and updates published-location state, hiding data loss from higher layers/user health reporting.
+- Evidence: FAIL-0005 direct source audit.
+- Validation state: source-confirmed.
+- Mitigation: propagate persistence outcome in current hardening where appropriate; permanent architecture defines capture success only at durable local-history commit.
+- Owner: post-Travel readiness gate / Durable Local History
+- Review trigger: next persistence/capture change
+- Recorded by: ChatGPT consolidation
+
+### R-0017: `External tooling can cross the private-diagnostic trust boundary`
+- Date recorded (UTC): 2026-11-27
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: high
+- Area: privacy/development tooling
+- Risk: an AI/tool with broad ADB, debuggable `run-as`, raw logcat/UI/filesystem access can retrieve private personal diagnostics despite procedural redaction rules; current debug logs can contain detailed location/configuration values.
+- Evidence: FAIL-0002 and recurrence; direct logging/preferences source review; owner clarification.
+- Validation state: verified current development risk.
+- Mitigation: rich owner-private diagnostics remain permitted; secrets excluded from logs; develop a technically constrained tool-safe diagnostic surface/capability; use synthetic environments for broad automation; raw personal-device access exceptional/minimum-scope.
+- Owner: security/privacy tooling design and Android hardening plans
+- Review trigger: any physical-device automation, debug/log redesign, or external-agent integration
+- Recorded by: ChatGPT consolidation
+
+### R-0018: `Android foreground-service declaration may not match location work`
+- Date recorded (UTC): 2026-11-27
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: high
+- Area: Android platform/lifecycle
+- Risk: the current service is declared/runtime-started as `connectedDevice` while its core long-running behavior includes location tracking/sharing; Android 14+ foreground-service contracts require appropriate declared types/permissions and location work has a dedicated `location` type.
+- Evidence: current manifest/service source; current Android Developers foreground-service documentation. Physical S24 tracking worked, so this is a platform-contract risk rather than proof of a current runtime failure.
+- Validation state: source/platform mismatch requiring targeted resolution/testing.
+- Mitigation: reconcile manifest/runtime service type/permissions with current Android rules, then repeat lifecycle/background tests.
+- Owner: post-Travel Android readiness gate
+- Review trigger: before production/release target or any service/lifecycle change
+- Recorded by: ChatGPT consolidation
+
+### R-0019: `Compatibility-era security and configuration surfaces exceed final LateralLine posture`
+- Date recorded (UTC): 2026-11-27
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: medium
+- Area: security/privacy/compatibility
+- Risk: donor-era ordinary SharedPreferences hold endpoint credentials, DEBUG logging can emit preference/payload values, network config globally permits cleartext/user CAs, `content://` configuration import bypasses the explicit URI/file enable check before user Apply, and exported shortcut aliases add a small external-launch surface. Treating these as permanent architecture could weaken security/privacy.
+- Evidence: direct current source/manifest/resource review; shortcut behavior/tests.
+- Validation state: source-confirmed surfaces; exploitability/required compatibility varies by item.
+- Mitigation: preserve current compatibility only where needed; secrets excluded from diagnostics; threat-model and narrow final network/config/exported-component posture; keep compatibility adapters separate from canonical architecture.
+- Owner: security hardening / Android product plans
+- Review trigger: release hardening, configuration redesign, credential/device-identity implementation
+- Recorded by: ChatGPT consolidation
+
+### R-0020: `Release/CI/static-analysis evidence is weaker than a publication-quality gate`
+- Date recorded (UTC): 2026-11-27
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: medium
+- Area: engineering/release
+- Risk: the current artifact is debug-signed, lint uses `abortOnError=false` with a large donor backlog, and reviewed LateralLine commits exposed no GitHub commit-status checks. Local successful Gradle/device evidence could be overread as an enforced production release pipeline.
+- Evidence: build configuration, Travel plan lint counts, GitHub commit-status inspection.
+- Validation state: verified current process gap.
+- Mitigation: keep local evidence precise now; establish required CI/release-signing/static-analysis policy before publication-quality distribution.
+- Owner: readiness/release hardening milestones
+- Review trigger: before broader release or when CI is revised
+- Recorded by: ChatGPT consolidation
+
+### R-0021: `Storage pressure/reclamation can fail when free space is already low`
+- Date recorded (UTC): 2026-11-27
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: high
+- Area: durable local history/storage lifecycle
+- Risk: physical storage is finite; row deletion may not return filesystem bytes, compaction/rewrite can require substantial working space, and an emergency algorithm that needs more free disk/RAM than remains cannot preserve continued recording.
+- Evidence: owner storage requirements; SQLite documentation on freelist/auto-vacuum/VACUUM; current queue has no permanent-history storage-pressure architecture.
+- Validation state: architecture risk; implementation open.
+- Mitigation: proactive forecasting, operational reserve, storage accounting, lossless reclamation first, storage representation with real reclaim behavior, bounded-resource emergency algorithms, low/full-disk tests.
+- Owner: Durable Local History / future Storage Lifecycle milestone
+- Review trigger: local-history storage-engine selection and storage-reduction design
+- Recorded by: ChatGPT consolidation
+
+### R-0022: `Local cleanup could be confused with global deletion`
+- Date recorded (UTC): 2026-11-27
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: high
+- Area: storage lifecycle/synchronization
+- Risk: if local presence, sync state, offload safety, fidelity, and logical existence are collapsed, a storage cleanup could accidentally propagate a server deletion or a server ACK could trigger unintended local destruction.
+- Evidence: owner requirements; DEC-0017.
+- Validation state: architectural risk before implementation.
+- Mitigation: separate local offload, local destructive reduction, and global deletion APIs/events/state; explicit authorization/audit for global deletion; server full-fidelity retention by default.
+- Owner: history/sync/storage-lifecycle designs
+- Review trigger: any local offloading, tombstone, retention, or delete API design
+- Recorded by: ChatGPT consolidation
+
+### R-0023: `Portable/off-grid deployment can become a fragile single copy`
+- Date recorded (UTC): 2026-11-27
+- Last reviewed (UTC): 2026-11-27
+- Status: open
+- Severity: high
+- Area: deployment/backup
+- Risk: a battery-powered portable server is exposed to abrupt power loss, theft, damage and storage failure; autonomy can be mistaken for durability if it becomes the only remaining full copy.
+- Evidence: owner portable-server requirement; existing backup/security direction.
+- Validation state: future operational risk.
+- Mitigation: transactional durability/power-loss testing, verified backups/restore drills, durability/offload-safe policy, portable storage quality guidance, server identity independent of host.
+- Owner: backend/deployment/storage-lifecycle plans
+- Review trigger: portable-host deployment or local offload policy design
+- Recorded by: ChatGPT consolidation

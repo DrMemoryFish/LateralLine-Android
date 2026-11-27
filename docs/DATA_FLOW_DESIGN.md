@@ -1,3 +1,5 @@
+> **LateralLine authority / freshness warning (2026-11-27):** this is a retained OwnTracks donor technical document, not the LateralLine architecture owner. Parts are stale relative to current Travel Build v0—for example, diagrams/text still describe a filesystem/blocking queue while the current outgoing transport queue is Room-backed. Use current source/tests for donor behavior and `docs/PLATFORM_ARCHITECTURE.md` for LateralLine's decided long-term data/system contracts. Do not copy donor queue/transport semantics into future LateralLine architecture merely because they appear below.
+
 # OwnTracks Android - Data Flow Design Document
 
 ## Overview

@@ -181,3 +181,15 @@ Source/test edits and builds are rerunnable. Before resuming after interruption,
 
 ## Checkpoint Manifest
 - Sidecar: `plans/ACTIVE/2026-11-24_travel-build-v0.checkpoint.json`
+
+## Post-Completion Source Audit Qualification — 2026-11-27
+Travel Build v0 remains complete for the bounded contract it actually implemented and tested: separate installation identity, five-million configured outgoing-queue capacity, no eviction of an already-persisted row merely to admit a new/full requeue attempt, focused host/device tests, and the recorded S24 lifecycle/offline/reconnect evidence.
+
+A later direct source audit identified important inherited/current behavior that **must not be read out of the acceptance wording**:
+- `queueMessageForSending()` exposes asynchronous persistence success/failure, but `LocationProcessor` currently does not await that result and can return publish success/update published-location state after a failed queue write (FAIL-0005). Therefore “persistence failure is explicit” is true at the queue API/log layer, not an end-to-end guarantee that the producer never represents failure as success.
+- sender retry state does not feed its decremented retry count back into the live counter, while retryable messages are requeued to the head; persistent failure can cycle/head-starve newer regular messages (FAIL-0004).
+- dequeue removes the row before network delivery, so process/power loss during the send window can lose the queue's only persisted copy; failed requeue after dequeue is another loss path.
+- connection preference changes can clear the outgoing queue.
+- deserialization failure substitutes `MessageUnknown` and deletes the original queue row; legacy migration can clean up source files after partial migration success.
+
+These findings do not retroactively fail the Travel milestone because lossless permanent history/retry redesign was explicitly outside its scope. They do mean the build must not be described as a lossless or production-hardened recorder. The permanent remedy is durable local history independent of transport, preceded by bounded hardening/characterization where owner-authorized.

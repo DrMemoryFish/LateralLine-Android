@@ -27,3 +27,39 @@
   - Evidence depth: `snippet`
   - Project concern informed: current compatibility/history infrastructure and future migration boundary.
   - Notes: Recorder is not the intended authoritative LateralLine backend.
+- Source: Android Developers — Foreground service types, https://developer.android.com/develop/background-work/services/fgs/service-types
+  - Date accessed: 2026-11-27
+  - Citation role: `load_bearing`
+  - Evidence depth: `page_read`
+  - Project concern informed: current Android foreground-service type/permission contract for long-running location work.
+  - Notes: current Travel manifest declares `connectedDevice`; modern Android documents a dedicated `location` foreground-service type and type-specific permission/prerequisites. Physical S24 success does not remove the need to reconcile the platform contract.
+- Source: SQLite — PRAGMA auto_vacuum, https://sqlite.org/pragma.html and VACUUM, https://sqlite.org/lang_vacuum.html
+  - Date accessed: 2026-11-27
+  - Citation role: `load_bearing`
+  - Evidence depth: `page_read`
+  - Project concern informed: physical storage reclamation and working-space requirements for future local-history/storage-lifecycle design.
+  - Notes: with auto-vacuum disabled, deleted pages normally remain on the freelist and the database file does not shrink; full VACUUM rebuilds the database and can require substantial temporary free space. Do not equate logical row deletion with device bytes recovered.
+- Source: direct LateralLine `travel-build-v0` source audit at pushed HEAD `f2995e5c8bee3b6a43a7e8c5d140bf4adae64f2f`.
+  - Date accessed: 2026-11-27
+  - Citation role: `load_bearing`
+  - Evidence depth: `local_primary_source` via GitHub connector
+  - Project concern informed: queue-persistence result propagation, retry state/head requeue, dequeue-before-send, preference queue clear, deserialization/migration behavior, FGS declaration, logging/preferences/network config, configuration import and debug/release/lint posture.
+  - Notes: source observations are recorded separately from future architecture decisions in FAIL/RISK entries and `docs/PLATFORM_ARCHITECTURE.md`.
+- Source: Liu et al., “Bounded Quadrant System: Error-bounded Trajectory Compression on the Go”, arXiv:1412.0321 / ICDE 2015.
+  - Date accessed: 2026-11-27
+  - Citation role: `supportive_background`
+  - Evidence depth: `abstract/page_read`
+  - Project concern informed: future resource-bounded online trajectory simplification research.
+  - Notes: research candidate only; does not satisfy LateralLine's semantic/cumulative/user-authorization requirements by itself.
+- Source: Liu et al., “A Novel Framework for Online Amnesic Trajectory Compression in Resource-constrained Environments”, arXiv:1605.02337.
+  - Date accessed: 2026-11-27
+  - Citation role: `supportive_background`
+  - Evidence depth: `abstract/page_read`
+  - Project concern informed: future storage-constrained progressive trajectory reduction research.
+  - Notes: research candidate only; LateralLine explicitly rejects automatic destructive reduction of canonical history and requires owner-controlled fidelity/provenance semantics.
+- Source: Lin et al., “One-Pass Trajectory Simplification Using the Synchronous Euclidean Distance”, arXiv:1801.05360, plus semantic/spatiotemporal trajectory-simplification literature reviewed during discussion.
+  - Date accessed: 2026-11-27
+  - Citation role: `supportive_background`
+  - Evidence depth: `abstract/page_read`
+  - Project concern informed: SED/time-aware alternatives to purely geometric line simplification.
+  - Notes: candidate evaluation family only; speed/stops/activity/uncertainty and cumulative information loss require broader metrics than geometry alone.

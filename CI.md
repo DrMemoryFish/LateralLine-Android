@@ -1,4 +1,6 @@
-# CI pipelines / flow
+# CI pipelines / flow — inherited OwnTracks reference
+
+> **LateralLine authority warning:** this file is retained donor CI documentation. It describes OwnTracks Android workflows and is not proof that the current LateralLine branch is protected by equivalent required checks. During the 2026-11-27 post-Travel audit, the reviewed LateralLine commits had no attached GitHub commit-status checks. Future publication-quality CI/release policy belongs to LateralLine planning/governance, not this donor reference.
 
 OwnTracks Android uses Github Actions to build, test and release.
 
@@ -10,28 +12,16 @@ Assembles the debug and release variants of both GMS and OSS flavours. Also comp
 
 ### F-Droid scan
 
-Runs the [F-Droid server scanner](https://gitlab.com/fdroid/fdroidserver) against the OSS Release APK to make sure that no non-free components snuk into the release.
+Runs the F-Droid server scanner against the OSS Release APK to make sure that no non-free components enter the release.
 
 ### UI tests
 
-Runs the espresso tests. Can be parameterized over which flavour to run (OSS/GMS), parallelism, the Android API version of the emulator to use. Uploads coverage to [CodeCov](https://app.codecov.io/gh/owntracks/android)
+Runs the espresso tests. Can be parameterized over flavour, parallelism and Android API level. Uploads coverage to CodeCov in the donor project.
 
 ### Publish to Play Store
 
-Uploads the release bundle of the GMS flavour to the Google Play Store internal testing track.
+Uploads the release bundle of the GMS flavour to the Google Play Store internal testing track in the donor project.
 
 ## Workflows
 
-Three main workflows:
-
-1. `Build and Test` runs the `build-test-lint`, `fdroid-scanner`, `espresso-test` (matrixed across oss/gms flavours) and `publish-to-play-store` jobs. Triggered on every commit to `master` that changes the source.
-2. `Android Release` pulls the appropriate secrets and then assembles a `release` variant of the `gms` flavour, before uploading to the right Google Play Store track.
-3. `Close stale issues and PRs` closes open issues that are waiting a response and haven't received one in a while.
-
-## Github Actions jobs
-
-There's 3 GHA workflows that help manage PRs and releases.
-
-### Android Release
-
-Triggered by a version tag, this workflow creates a Github Release, fetches the APKs from the corresponding CircleCI workflow and attaches them to the release, and finally promotes the Play Store build between either internal and beta, beta and production or internal and production (depending on whether it's a beta tag or not).
+The retained donor workflows include build/test/lint, release, and issue/PR maintenance automation. Inspect `.github/workflows/` and current repository runtime evidence before assuming any donor workflow is active, correctly credentialed, or enforced for LateralLine.

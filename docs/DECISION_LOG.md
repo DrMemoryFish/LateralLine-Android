@@ -251,3 +251,93 @@ For DEC-0001 through DEC-0012, event date `2026-10-10` records when the owner su
 - Boundary: this decision governs repository commit/push execution only after owner authorization; it does not broaden implementation scope or bypass destructive/external stop conditions.
 - Follow-up actions: use the governed sequence for this and future owner-authorized commits.
 - Recorded by: Codex
+
+### 2026-11-27 - DEC-0015
+- Date recorded (UTC): 2026-11-27
+- Decision ID: DEC-0015
+- Context: Travel Build v0 proved that a large persistent transport queue reduces immediate travel risk but does not provide authoritative local history. Post-completion audit also showed that the current producer can report success without awaiting queue persistence and that the queue has dequeue-before-send and other loss windows.
+- Decision: LateralLine's permanent capture model preserves accepted **original observations** as protocol-independent canonical local records before transport. Original observations include available uncertainty/quality and relevant capture metadata, including inaccurate fixes when accepted by the acquisition boundary. Corrections, quality assessments, map-matched positions, inferred activities, reconstructed journeys, simplifications, and other processed data remain separate derived objects and never silently overwrite the original. A record is considered durably captured only after the local-history durability contract successfully commits it. Each record has stable logical identity independent of wall-clock time, per-recording-stream ordering information, and provenance; device identity and recording lineage/stream epoch remain distinct to survive restore/reinstall/clone/import cases.
+- Reason: history must represent what was actually observed, preserve uncertainty, survive network/server/transport changes, and remain reconcilable across device lifecycle and migration.
+- Alternatives considered: use OwnTracks `MessageLocation` as permanent internal truth; treat timestamp/device pair as identity; persist only filtered/accurate points; treat async enqueue/server delivery as capture success.
+- Tradeoffs: more local schema/provenance complexity, explicit migration/versioning requirements, and future derived-data storage/indexing.
+- Consequences: Durable Local History v1 must place the canonical commit boundary before transport; publishing/display filters may remain separate policies; exact record-ID/timestamp/schema algorithms remain open in OQ entries.
+- Source surfaces and evidence: owner/ChatGPT post-Travel architecture discussion; direct `LocationProcessor`/`MessageProcessor` source audit; DEC-0002; `docs/PLATFORM_ARCHITECTURE.md`.
+- Validation state: `decided architecture; not implemented`
+- Boundary: no Durable Local History implementation is authorized by this decision.
+- Follow-up actions: use this contract to scope the next history design/implementation plan and resolve the remaining storage/identity open questions with evidence.
+- Recorded by: ChatGPT consolidation under owner instruction
+
+### 2026-11-27 - DEC-0016
+- Date recorded (UTC): 2026-11-27
+- Decision ID: DEC-0016
+- Context: large historical backlog, ambiguous network failure, multiple future transports, and a future multi-user server require a synchronization contract stronger than the donor FIFO queue.
+- Decision: Future synchronization uses stable record identities with **at-least-once transport and idempotent logical ingestion**, durable server acknowledgements/checkpoints only after the defined server commit boundary, and durable client sync state. Current/live delivery has independent high-priority scheduling semantics so it cannot be starved behind historical backfill; historical backfill is resumable/checkpointed and may batch/compress where evidence supports it. Wall-clock timestamps are not the sole ordering identity. HTTP/MQTT/WebSocket roles remain open and are chosen by evidence; protocols are adapters around canonical records, not the domain model.
+- Reason: after a commit-but-lost-ACK event the client cannot know whether the server accepted the request. Safe resend plus idempotent storage is more robust than pretending network delivery can be exactly-once. Live visibility must remain useful during large backlog recovery.
+- Alternatives considered: exactly-once transport semantics; one FIFO stream; permanent OwnTracks MQTT/HTTP as LateralLine internal architecture; HTTP 200 alone as archive/offload proof.
+- Tradeoffs: requires stable IDs, server transaction semantics, checkpoints/reconciliation, and co-design with backend/device identity.
+- Consequences: sync/backend/device-auth contracts require design overlap before deep implementation even if milestones stay separate. Exact batch encoding, compression, transport role split, and checkpoint representation remain open.
+- Source surfaces and evidence: owner/ChatGPT discussion; DEC-0003; R-0003/R-0012; `docs/PLATFORM_ARCHITECTURE.md`.
+- Validation state: `decided architecture; not implemented`
+- Boundary: no sync/backend implementation or transport selection is authorized here.
+- Follow-up actions: carry the contract into synchronization/backend/identity design and failure-injection acceptance tests.
+- Recorded by: ChatGPT consolidation under owner instruction
+
+### 2026-11-27 - DEC-0017
+- Date recorded (UTC): 2026-11-27
+- Decision ID: DEC-0017
+- Context: finite mobile storage must be managed without turning local cleanup into permanent history loss or server-side retention policy. The owner wants continued recording during difficult offline travel while preserving maximum original information.
+- Decision: Full-fidelity canonical originals are retained locally by default within physical limits, and full-fidelity originals durably ingested by the server are retained there by default. Successful synchronization does not automatically delete the local copy. Three operations are separate: (1) lossless local offloading/redundant-copy eviction of an offload-safe full copy; (2) explicit user-authorized **local** destructive fidelity reduction; and (3) explicit ecosystem-wide/global deletion. Local cleanup/reduction never emits an implicit server deletion. `synced` and `offload-safe` are distinct states. Automatic storage management may reclaim nonessential data, losslessly optimize, perform user-policy-controlled lossless offloading, forecast/warn, and prepare reduction proposals, but it does not automatically destructively simplify canonical history.
+- Reason: local storage pressure and global retention are different concerns; a trusted remote copy can make local offload lossless ecosystem-wide, while device-only originals require explicit tradeoff before loss.
+- Alternatives considered: delete local originals immediately after sync; use one synced/deleted boolean; automatic lossy simplification at critical storage; propagate local deletion as sync tombstone.
+- Tradeoffs: richer copy/fidelity/archive state, more explicit UX/policy, and future rehydration/storage-accounting complexity.
+- Consequences: future storage lifecycle supports fidelity state, protected/pinned ranges, lightweight local derived representations after offload, and rehydration where full originals remain elsewhere. Exact offload-safe durability classes remain open.
+- Source surfaces and evidence: owner/ChatGPT storage-lifecycle discussion; `docs/PLATFORM_ARCHITECTURE.md` §§4–5.
+- Validation state: `decided architecture; not implemented`
+- Boundary: no storage reduction/offloading/forecasting implementation is authorized; none is required for Durable Local History v1 beyond preserving extensibility/state separation.
+- Follow-up actions: dedicated later storage-lifecycle milestone after canonical history and server archive state exist.
+- Recorded by: ChatGPT consolidation under owner instruction
+
+### 2026-11-27 - DEC-0018
+- Date recorded (UTC): 2026-11-27
+- Decision ID: DEC-0018
+- Context: physical-device validation exposed private location/network data to external AI tooling. The owner clarified that rich private local diagnostics are desirable; the confidentiality concern is external tooling access, while authentication secrets require stricter treatment than ordinary personal diagnostics.
+- Decision: Distinguish **secrets**, **private diagnostics/personal data**, and **tool-safe diagnostics**. Rich local diagnostics may include coordinates, addresses, network/location context, and other useful owner-visible information. Secrets such as passwords, private keys, auth/session/refresh tokens, API keys, recovery secrets, authorization headers, and device credentials should generally never be duplicated into diagnostic logs. External AI/development tooling receives minimized tool-safe diagnostics by default through technically enforced capability boundaries where practical. Unrestricted ADB/run-as/raw log/filesystem/UI access is not considered a real privacy boundary merely because instructions say not to inspect private data. Synthetic isolated environments are preferred for scale/failure engineering.
+- Reason: protect the owner and credentials without crippling legitimate local diagnostics or relying on prompt/procedural discipline as the sole control.
+- Alternatives considered: globally remove detailed diagnostics; allow arbitrary raw AI access with instruction-only redaction; treat credentials as ordinary PII.
+- Tradeoffs: requires a dedicated safe diagnostic surface/capability model and may restrict some automated inspection on personal devices.
+- Consequences: FAIL-0002 containment remains interim; future tooling/privacy design must enforce least privilege. Current debug logging/SharedPreferences behavior remains technical debt rather than accepted architecture.
+- Source surfaces and evidence: FAIL-0002; owner clarification; current logging/preferences source; `docs/PLATFORM_ARCHITECTURE.md` §8.
+- Validation state: `decided architecture/process direction; not implemented`
+- Boundary: this does not forbid owner-visible private diagnostics and does not authorize secrets to be logged.
+- Follow-up actions: define the technical diagnostic/tooling boundary in a future hardening plan.
+- Recorded by: ChatGPT consolidation under owner instruction
+
+### 2026-11-27 - DEC-0019
+- Date recorded (UTC): 2026-11-27
+- Decision ID: DEC-0019
+- Context: LateralLine is intended to move from the owner's PC to home/portable Linux hardware and remain functional without mandatory public-cloud infrastructure, including possible battery/power-bank/solar-assisted server operation.
+- Decision: The core LateralLine ecosystem is intended to remain open-source, self-hostable, and operable without mandatory project/SaaS subscription fees or proprietary cloud services. Optional proprietary integrations may exist but are not core dependencies. Client/server local operation should work over a reachable LAN without requiring Cloudflare/public DNS. A deployment's logical identity/trust is independent of its current hardware, IP, domain, reverse proxy, or hosting provider and may survive secure key rotation/migration. Portable/off-grid Linux/ARM64-class operation is a real future validation target; no promise is made to support arbitrary OS/hardware without evidence.
+- Reason: preserve autonomy, portability, incremental migration, and usable local operation under intermittent/no internet.
+- Alternatives considered: cloud/SaaS-dependent architecture; binding server identity to URL/host/private key; host-specific manual architecture.
+- Tradeoffs: local discovery/TLS/passkey relying-party design, backup/recovery, abrupt-power resilience, ARM/resource testing, and optional integration boundaries require explicit work.
+- Consequences: Docker/Compose remains a portability tool rather than a security dependency; PostgreSQL/PostGIS performance on constrained hardware must be measured; the OSS/non-Google client path cannot be allowed to become irrelevant if needed for core independence.
+- Source surfaces and evidence: owner/ChatGPT deployment discussion; DEC-0008/0009/0011; `docs/PLATFORM_ARCHITECTURE.md` §7.
+- Validation state: `decided direction; not implemented`
+- Boundary: exact deployment topology, local discovery/TLS, licensing, backup topology, and hardware floor remain open.
+- Follow-up actions: resolve deployment/trust/licensing questions before publication-grade deployment architecture is frozen.
+- Recorded by: ChatGPT consolidation under owner instruction
+
+### 2026-11-27 - DEC-0020
+- Date recorded (UTC): 2026-11-27
+- Decision ID: DEC-0020
+- Context: the project has accumulated substantial owner/ChatGPT reasoning. Requiring Codex to repeatedly reconstruct that reasoning wastes context and creates avoidable architectural drift. The retained donor `DATA_FLOW_DESIGN.md` is not a suitable LateralLine architecture authority.
+- Decision: Owner/ChatGPT discussion is the primary exploratory/design forum; durable repository owner documents are the authoritative actionable result; Codex primarily performs bounded repository inspection/implementation/testing/debugging/verification/reporting against those documents. Codex may challenge invalid assumptions and propose alternatives, but consequential direction changes are surfaced rather than silently introduced. Create `docs/PLATFORM_ARCHITECTURE.md` as the owner for durable cross-system/data architecture contracts; retain donor technical documents as evidence only. Navigation must direct each assignment to the minimum relevant owner context rather than requiring full knowledge-base reads.
+- Reason: improve context efficiency, continuity, architectural consistency, and owner leverage without reducing Codex to blind execution or over-governing routine coding decisions.
+- Alternatives considered: keep architecture only in PROJECT_BRIEF/chat; promote donor DATA_FLOW_DESIGN to LateralLine authority; require every task to read all docs; let Codex independently reconstruct product direction each time.
+- Tradeoffs: architecture owner documents must be maintained as decisions evolve; navigation/authority changes must stay synchronized.
+- Consequences: `AGENTS.md`, governance navigation, authority matrix, repo map, task protocol, quality bar, roadmap, and registers route through the new owner surface. Plans still own task-local execution details, not durable policy.
+- Source surfaces and evidence: owner consolidation instruction; existing anti-sprawl/change-control/truth-hierarchy rules; retained donor document staleness.
+- Validation state: `decided governance structure; documentation consolidation only`
+- Boundary: no runtime implementation or future milestone activation is authorized.
+- Follow-up actions: use the new navigation model in subsequent planning and keep consequential unresolved choices in `docs/OPEN_QUESTIONS.md`.
+- Recorded by: ChatGPT consolidation under owner instruction
